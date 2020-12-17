@@ -1,4 +1,4 @@
 package backend.student;
 
-public class Note {
+public class Grade {
 }
