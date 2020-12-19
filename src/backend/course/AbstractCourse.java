@@ -1,6 +1,6 @@
 package backend.course;
 
-public abstract class AbstractBloc implements Bloc {
+public abstract class AbstractCourse implements Course {
 
     protected String id;
     protected String name;
