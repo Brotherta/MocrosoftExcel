@@ -1,26 +1,25 @@
 package backend.student;
-import java.util.ArrayList;
 import java.util.List;
-import backend.course.*;
+
 public class Student {
     private final String name;
     private final String surname;
-    private final String idEtud;
+    private final String studentId;
     private final String programId;
     private List<Grade> gradeList; //List<String> strings = new ArrayList<String>();
 
-    public Student(String name, String surname, String idEtud, String programId, List<Grade> gradeList) {
+    public Student(String name, String surname, String studentId, String programId, List<Grade> gradeList) {
         this.name = name;
         this.surname = surname;
-        this.idEtud = idEtud;
+        this.studentId = studentId;
         this.programId = programId;
        // this.gradeList=new ArrayList<Grade>();
         this.gradeList = gradeList;
     }
-    void setGrade(String idCourse,double grade)
+    void setGrade(String courseId,double grade)
     {
         int i=0;
-        while(this.gradeList.get(i).getCourse().getId()!=idCourse)
+        while(this.gradeList.get(i).getCourse().getId()!=courseId)
         {
             i++;
             if(i==this.gradeList.size()){return ;}//impossible que cela arrive
@@ -36,8 +35,8 @@ public class Student {
         return surname;
     }
 
-    public String getIdEtud() {
-        return idEtud;
+    public String getStudentId() {
+        return studentId;
     }
 
     public String getProgramId() {
