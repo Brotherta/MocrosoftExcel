@@ -1,12 +1,14 @@
 package backend.course;
 
+import sun.java2d.pipe.SpanShapeRenderer;
+
 import java.util.List;
 
 
 public class CompositeCourse extends AbstractCourse {
-    private List<Course> compositeList;
+    private List<SimpleCourse> compositeList;
 
-    public CompositeCourse(String id, String name, List<Course> compositeList){
+    public CompositeCourse(String id, String name, List<SimpleCourse> compositeList){
         this.compositeList = compositeList;
         this.id = id;
         this.name = name;
@@ -16,6 +18,6 @@ public class CompositeCourse extends AbstractCourse {
         }
     }
 
-    public List<Course> getCompositeList() { return this.compositeList; }
+    public List<SimpleCourse> getCompositeList() { return this.compositeList; }
 
 }
