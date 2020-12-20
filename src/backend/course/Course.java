@@ -6,3 +6,4 @@ public interface Course {
     String getName();
     int getCredits();
 }
+

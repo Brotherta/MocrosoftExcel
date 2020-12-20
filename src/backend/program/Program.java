@@ -10,14 +10,14 @@ public class Program {
     private final String name;
     List<SimpleCourse> simpleCourseList;
     List<OptionCourse> optionCourseList;
-    List<CompositeCourse> compositeCourses;
+    List<CompositeCourse> compositeCoursesList;
 
-    public Program(String id, String name, List<SimpleCourse> simpleCourseList, List<OptionCourse> optionCourseList, List<CompositeCourse> compositeCourses) {
+    public Program(String id, String name, List<SimpleCourse> simpleCourseList, List<OptionCourse> optionCourseList, List<CompositeCourse> compositeCoursesList) {
         this.id = id;
         this.name = name;
         this.simpleCourseList = simpleCourseList;
         this.optionCourseList = optionCourseList;
-        this.compositeCourses = compositeCourses;
+        this.compositeCoursesList = compositeCoursesList;
     }
 
     public String getId() {
@@ -36,8 +36,8 @@ public class Program {
         return optionCourseList;
     }
 
-    public List<CompositeCourse> getCompositeCourses() {
-        return compositeCourses;
+    public List<CompositeCourse> getCompositeCoursesList() {
+        return compositeCoursesList;
     }
     /*
     public static void main(String[] args) {
