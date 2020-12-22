@@ -12,6 +12,14 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Fonction:
+readStudent(List<Course> courses)
+readCourse();
+readProgram(List<Course> courseList)
+ */
+
+
 public class XmlReader {
 
     public static List<Student> readStudent(List<Course> courses) {
