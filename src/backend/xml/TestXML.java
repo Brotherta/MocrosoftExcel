@@ -25,43 +25,48 @@ import java.util.List;
 
 public class TestXML {
     public static void main(String[] args) {
-//        SimpleCourse c1 = new SimpleCourse("66666", "salut", 9);
-//        SimpleCourse c2 = new SimpleCourse("99999", "ça va ?", 10);
-//        List<SimpleCourse> l = new ArrayList<>();
-//        l.add(c1);
-//        l.add(c2);
-//
-//        Data save = new Data();
-//
-//        save.addCourse(c1);
-//        save.addCourse(c2);
-//
-//        List<Grade> grades = new ArrayList<>();
-//        Grade g1 = new Grade(0.0, c1);
-//        Grade g2 = new Grade(19.15, c2);
-//        grades.add(g1);
-//        grades.add(g2);
-//
-//        Student student = new Student("antoine", "Vidal", "21702760", "pas de prog", grades);
-//        student.getGradeList().get(0).setGrade(0.0);
-//        save.addStudent(student);
-//
-//        List<OptionCourse> options = new ArrayList<>();
-//        OptionCourse option1 = new OptionCourse("012345", "incroyable 1", l);
-//        OptionCourse option2 = new OptionCourse("123456z", "incroyable 2", l);
-//        options.add(option1);
-//        options.add(option2);
-//
-//        List<CompositeCourse> composites = new ArrayList<>();
-//
-//        Program program = new Program("un super prog", "vraimenty top", l, options, composites);
-//
-//        save.addProgram(program);
-//
-//
+        SimpleCourse c1 = new SimpleCourse("66666", "salut", 9);
+        SimpleCourse c2 = new SimpleCourse("99999", "ça va ?", 10);
+        List<SimpleCourse> l = new ArrayList<>();
+        l.add(c1);
+        l.add(c2);
+
+        Data data = new Data();
+
+        data.addCourse(c1);
+        data.addCourse(c2);
+
+        List<Grade> grades = new ArrayList<>();
+        Grade g1 = new Grade(0.0, c1);
+        Grade g2 = new Grade(19.15, c2);
+        grades.add(g1);
+        grades.add(g2);
+
+        Student student = new Student("antoine", "Vidal", "21702760", "pas de prog", grades);
+        student.getGradeList().get(0).setGrade(0.0);
+        data.addStudent(student);
+
+        List<OptionCourse> options = new ArrayList<>();
+        OptionCourse option1 = new OptionCourse("012345", "incroyable 1", l);
+        OptionCourse option2 = new OptionCourse("123456z", "incroyable 2", l);
+        options.add(option1);
+        options.add(option2);
+
+        List<CompositeCourse> composites = new ArrayList<>();
+
+        Program program = new Program("un super prog", "vraimenty top", l, options, composites);
+
+        data.addProgram(program);
+        List<Course> courses = data.getCourseList();
+        courses.clear();
+
+        List<Course> courses2 = data.getCourseList();
+        System.out.println("here");
+        System.out.println(courses2.get(0).getName());
+
 //        save.doSave();
-        XmlWriter.removeStudent("21232189");
-        XmlWriter.modifyGrade("21123983", "SLUIN501", "20.0");
+//        XmlWriter.removeStudent("21232189");
+//        XmlWriter.modifyGrade("21123983", "SLUIN501", "20.0");
 
     }
 }

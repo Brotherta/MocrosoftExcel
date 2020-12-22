@@ -24,15 +24,15 @@ public class Data {
     }
 
     public List<Student> getStudentList() {
-        return studentList;
+        return new ArrayList<>(studentList);
     }
 
     public List<Course> getCourseList() {
-        return courseList;
+        return new ArrayList<>(courseList);
     }
 
     public List<Program> getProgramList() {
-        return programList;
+        return new ArrayList<>(programList);
     }
 
     public void addStudent (Student student) {
@@ -49,6 +49,8 @@ public class Data {
         programList.add(program);
         save.addBuffer(program);
     }
+
+
 
     public void doSave() {
         save.doSave();
