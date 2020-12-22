@@ -29,6 +29,7 @@ public class XmlReader {
             String programId = xmlStudent.getElementsByTagName("program").item(0).getTextContent();
             List<Grade> grades = new ArrayList<>();
 
+
             List gradeList = XmlBny.getChildren(xmlStudent, "grade");
             for (int j = 0; j < gradeList.size(); j++) {
                 Element xmlGrade = (Element) gradeList.get(j);
@@ -38,9 +39,7 @@ public class XmlReader {
                 if(value.equals("ABI")) {
                     value = "-1";
                 }
-                if(value.isEmpty()) {
-                    value = "-2";
-                }
+
                 Course course = getCourseById(gradeId, courses);
                 Grade grade = new Grade(Double.parseDouble(value), course);
                 grades.add(grade);

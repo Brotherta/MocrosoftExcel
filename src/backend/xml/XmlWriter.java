@@ -36,6 +36,50 @@ public class XmlWriter {
         updateXml(doc);
     }
 
+    public static void removeStudent(String id) {
+        XmlBny writer = new XmlBny("data/data.xml");
+        Document doc = writer.getDoc();
+        Element root = writer.getRoot();
+
+        List studentList = XmlBny.getChildren(root, "student");
+        for (int i = 0; i < studentList.size(); i++) {
+            Element xmlStudent = (Element) studentList.get(i);
+            if (xmlStudent.getElementsByTagName("identifier").item(0).getTextContent().equals(id)) {
+                xmlStudent.getParentNode().removeChild(xmlStudent);
+                break;
+            }
+        }
+        updateXml(doc);
+    }
+
+    public static void modifyGrade(String studentId, String gradeId, String grade) {
+        XmlBny writer = new XmlBny("data/data.xml");
+        Document doc = writer.getDoc();
+        Element root = writer.getRoot();
+
+        List studentList = XmlBny.getChildren(root, "student");
+        for (int i = 0; i < studentList.size(); i++) {
+            Element xmlStudent = (Element) studentList.get(i);
+            if (xmlStudent.getElementsByTagName("identifier").item(0).getTextContent().equals(studentId)) {
+
+                List gradeList = XmlBny.getChildren(xmlStudent, "grade");
+                for (int j = 0; j < gradeList.size(); j++) {
+
+                    Element xmlGrade = (Element) gradeList.get(j);
+                    if (xmlGrade.getElementsByTagName("item").item(0).getTextContent().equals(gradeId)) {
+                        xmlGrade.getElementsByTagName("value").item(0).setTextContent(grade);
+                        break;
+                    }
+                }
+            }
+        }
+        updateXml(doc);
+    }
+
+    public static void modifyGrade(String studentId, String gradeId) {
+        modifyGrade(studentId, gradeId, "-2");
+    }
+
     private static void writeCourseInXml(List<SimpleCourse> courses, Element Node, Document doc) {
         for (Course course : courses) {
             Element item =  doc.createElement("item");
@@ -49,7 +93,7 @@ public class XmlWriter {
             StreamResult xmlOutput = new StreamResult(new File("datav2.xml"));
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            transformerFactory.setAttribute("indent-number", 4);
+            transformerFactory.setAttribute("indent-number", 2);
             Transformer transformer = transformerFactory.newTransformer();
 
 
