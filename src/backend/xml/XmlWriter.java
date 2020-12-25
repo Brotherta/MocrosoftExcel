@@ -22,7 +22,7 @@ public class XmlWriter {
         Element root = writer.getRoot();
 
         for (Object o: buffer) {
-            if (o instanceof Course) {
+            if (o instanceof Course) { // A justifier
                 Course course = (Course) o;
                 addCoursesToXml((Course) o, doc, root);
             }
