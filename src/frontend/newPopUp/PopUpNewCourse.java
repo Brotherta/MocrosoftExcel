@@ -13,22 +13,31 @@ public class PopUpNewCourse extends JFrame {
     public PopUpNewCourse() {
         super("NewCourse");
         data=new Data();
+        ContenuPanels = new ArrayList<>();
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setMinimumSize(new Dimension(800,500));
+        setPreferredSize(new Dimension(800,500));
+
         JPanel panelGlob= new JPanel();
+       // panelGlob.setBorder(new TitledBorder("Globale"));
         panelGlob.setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(500,250));
+        panelGlob.setPreferredSize(new Dimension(800,500));
+
+
         JPanel mainPanel = new JPanel();
         JPanel panelMenu=new JPanel();
         panelMenu.setLayout(new BorderLayout());
-        panelMenu.setMaximumSize(new Dimension(2000,50));
-        mainPanel.add(panelMenu);
+        panelMenu.setMaximumSize(new Dimension(800,100));
+        panelGlob.add(panelMenu,BorderLayout.NORTH);
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        ContenuPanels = new ArrayList<>();
-       // ContenuPanels.add("");
+       // mainPanel.setPreferredSize(new Dimension(720,500));
         mainPanel.setBorder(new TitledBorder("Cours"));
+
+
         JButton button = new JButton("Ajouter un cours");
-        button.setMaximumSize(new Dimension(50,50));
         panelMenu.add(button, BorderLayout.EAST);
+
         button.addActionListener(e1 -> {
             ////////////////////////////////////////////////////////////////////////////////////////////////
             ContenuPanels.add("NULL");
@@ -56,7 +65,7 @@ public class PopUpNewCourse extends JFrame {
             revalidate();
             ////////////////////////////////////////////////////////////////////////////////////////////////
         });
-        JButton validate = new JButton("Valider");
+        JButton validate = new JButton("Terminer");
         validate.addActionListener(e3 -> {
             System.out.println(ContenuPanels);
             for(int i=0;i<ContenuPanels.size();i++)
@@ -68,12 +77,13 @@ public class PopUpNewCourse extends JFrame {
                     data.addCourse(new SimpleCourse((String)ContenuPanelsTmp.get(1),(String)ContenuPanelsTmp.get(0),Integer.parseInt((String)ContenuPanelsTmp.get(2))));
                 }
             }
+            dispose();
             System.out.println(ContenuPanels);
         });
-        validate.setMaximumSize(new Dimension(50,50));
+
         JPanel panelFin=new JPanel();
         panelFin.setLayout(new BorderLayout());
-        panelFin.setMaximumSize(new Dimension(2000,50));
+       // panelFin.setMaximumSize(new Dimension(1080,50));
         panelFin.add(validate,BorderLayout.EAST);
         ////////////////////////////////////////////////////////////////////////////////////////////////
         ContenuPanels.add("NULL");
@@ -99,15 +109,19 @@ public class PopUpNewCourse extends JFrame {
         mainPanel.add(paneltmp);
         revalidate();
         ////////////////////////////////////////////////////////////////////////////////////////////////
-        getContentPane().add(new JScrollPane(mainPanel));
-        panelGlob.add(panelFin,BorderLayout.SOUTH);
-        validate.addActionListener(e2 -> {
-        });
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        //scrollPane.setMinimumSize(new Dimension(720,500));
+        scrollPane.setPreferredSize(new Dimension(800,500));
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        panelGlob.add(scrollPane);
 
-        panelGlob.add(mainPanel,BorderLayout.CENTER);
+        panelGlob.add(panelFin,BorderLayout.SOUTH);
+       // panelGlob.add(mainPanel,BorderLayout.CENTER);
         add(panelGlob);
         setVisible(true);
-    }/*
+    }
+    /*
     public static void main(String[] args) {
         new PopUpNewCourse();
     }*/
