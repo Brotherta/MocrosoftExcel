@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 public class popUpNewPrograms extends JFrame {
@@ -165,11 +166,11 @@ public class popUpNewPrograms extends JFrame {
             JPanel panelCoursOptions = new JPanel();
             panelCoursOptions.setSize(new Dimension(width/4,500));
             panelCoursOptions.setLayout(new BoxLayout(panelCoursOptions,BoxLayout.Y_AXIS));
-        JButton ajoutDeCours2 = new JButton("Ajouter un Cours");
-        JPanel menuCoursOption=new JPanel();
-        menuCoursOption.setLayout(new BoxLayout(menuCoursOption,BoxLayout.X_AXIS));
-        JButton ValiderCoursOptions = new JButton("Valider les cours");
-        ValiderCoursOptions.addActionListener(new ActionListener() {
+            JButton ajoutDeCours2 = new JButton("Ajouter un Cours");
+            JPanel menuCoursOption=new JPanel();
+            menuCoursOption.setLayout(new BoxLayout(menuCoursOption,BoxLayout.X_AXIS));
+            JButton ValiderCoursOptions = new JButton("Valider les cours");
+            ValiderCoursOptions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 NewCourseOptionsListProgramFinal=new ArrayList<>();
@@ -183,19 +184,19 @@ public class popUpNewPrograms extends JFrame {
                 System.out.println(NewCourseOptionsListProgramFinal);
             }
         });
-        menuCoursOption.add(ajoutDeCours2);
-        menuCoursOption.add(ValiderCoursOptions);
-        panelCoursOptions.add(menuCoursOption);
-        JPanel panelChoixCoursOptionsContainer = new JPanel();
-        panelChoixCoursOptionsContainer.setBorder(new TitledBorder("Liste Options"));
-        panelChoixCoursOptionsContainer.setSize(new Dimension(width/4,500));
-        panelChoixCoursOptionsContainer.setLayout(new BoxLayout(panelChoixCoursOptionsContainer,BoxLayout.Y_AXIS));
-        numberCoursOptions=0;
+            menuCoursOption.add(ajoutDeCours2);
+            menuCoursOption.add(ValiderCoursOptions);
+            panelCoursOptions.add(menuCoursOption);
+            JPanel panelChoixCoursOptionsContainer = new JPanel();
+            panelChoixCoursOptionsContainer.setBorder(new TitledBorder("Liste Options"));
+            panelChoixCoursOptionsContainer.setSize(new Dimension(width/4,500));
+            panelChoixCoursOptionsContainer.setLayout(new BoxLayout(panelChoixCoursOptionsContainer,BoxLayout.Y_AXIS));
+            numberCoursOptions=0;
 
             ajoutDeCours2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursOptions);
+                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursOptions,"Options");
                 numberCoursOptions++;
                 NewCourseOptionsListProgram.add("NULL");
                 JButton annuler=new JButton("Supprimer l'options");
@@ -243,39 +244,55 @@ public class popUpNewPrograms extends JFrame {
         JPanel menuCoursComposite=new JPanel();
         menuCoursComposite.setLayout(new BoxLayout(menuCoursComposite,BoxLayout.X_AXIS));
         JButton ValiderCoursComposite = new JButton("Valider les cours");
+        ValiderCoursComposite.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                NewCourseCompositeListProgramFinal=new ArrayList<>();
+                for(int i=0;i<NewCourseCompositeListProgram.size();i++)
+                {
+                    if(NewCourseCompositeListProgram.get(i)!="NULL")
+                    {
+                        NewCourseCompositeListProgramFinal.add((CompositeCourse) NewCourseCompositeListProgram.get(i));
+                    }
+                }
+                System.out.println(NewCourseCompositeListProgramFinal);
+            }
+        });
         menuCoursComposite.add(ajoutDeCours3);
         menuCoursComposite.add(ValiderCoursComposite);
         panelCoursComposite.add(menuCoursComposite);
         JPanel panelChoixCoursCompositeContainer = new JPanel();
-        panelChoixCoursCompositeContainer.setBorder(new TitledBorder("Liste Cours"));
+        panelChoixCoursCompositeContainer.setBorder(new TitledBorder("Liste Options"));
         panelChoixCoursCompositeContainer.setSize(new Dimension(width/4,500));
         panelChoixCoursCompositeContainer.setLayout(new BoxLayout(panelChoixCoursCompositeContainer,BoxLayout.Y_AXIS));
-        numberCoursOptions=0;
+        numberCoursComposite=0;
 
         ajoutDeCours3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PanelChoixCompositeCours panelChoixCompositeCours= new PanelChoixCompositeCours(courseList,width/4,numberCoursComposite);
+                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursComposite,"Composite");
                 numberCoursComposite++;
                 NewCourseCompositeListProgram.add("NULL");
-                JButton annuler=new JButton("X");
+                JButton annuler=new JButton("Supprimer");
                 JPanel panelTmp=new JPanel();
+                panelTmp.setLayout(new BoxLayout(panelTmp,BoxLayout.Y_AXIS));
                 panelTmp.setSize(new Dimension((width/4)-30,70));
                 panelChoixCoursCompositeContainer.add(panelTmp);
                 annuler.addActionListener(e2->{
-                    // NewCourseCompositeListProgram.set(panelChoixCompositeCours.getNumberCoursComposite(),"NULL");
-                    // panelChoixCoursOptionsContainer.remove(panelTmp);
+                    NewCourseCompositeListProgram.set(panelChoixOptionsCours.getNumberCoursOptions(),"NULL");
+                    panelChoixCoursCompositeContainer.remove(panelTmp);
                     revalidate();
                     repaint();
                 });
-                JButton Cree=new JButton("V");
+                JButton Cree=new JButton("Valider");
                 Cree.addActionListener(e3->{
-                    //List<Course> lesCours=panelChoixCompositeCours.getCourse();
-                    // NewCourseOptionsListProgram.set(panelChoixCompositeCours.getNumberCoursComposite(),lesCours);
+                    CompositeCourse lesCours=panelChoixOptionsCours.getlistChoixCoursSimpleAsComposite();
+                    NewCourseCompositeListProgram.set(panelChoixOptionsCours.getNumberCoursOptions(),lesCours);
+                    System.out.println(NewCourseCompositeListProgram);
                 });
                 JPanel tmpBouton=new JPanel();
-                tmpBouton.setLayout(new BoxLayout(tmpBouton,BoxLayout.Y_AXIS));
-                panelTmp.add(panelChoixCompositeCours);
+                tmpBouton.setLayout(new BoxLayout(tmpBouton,BoxLayout.X_AXIS));
+                panelTmp.add(panelChoixOptionsCours);
                 tmpBouton.add(Cree);
                 tmpBouton.add(annuler);
                 panelTmp.add(tmpBouton);
@@ -306,8 +323,9 @@ public class popUpNewPrograms extends JFrame {
         PanelFin.setLayout(new BorderLayout());
         JButton Terminer=new JButton("Terminer");
         Terminer.addActionListener(terminerPage -> {
-            System.out.println(NewCourseListProgram);
-            dispose();
+            System.out.println("Creation du programme : ");
+            Program program = new Program(identifiant.getText(),nomProgramme.getText(),NewCourseListProgramFinal,NewCourseOptionsListProgramFinal,NewCourseCompositeListProgramFinal);
+            System.out.println(program);
         });
         PanelFin.add(Terminer,BorderLayout.EAST);
         panelGlobale.add(PanelFin,BorderLayout.SOUTH);

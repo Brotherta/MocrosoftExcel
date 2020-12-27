@@ -4,6 +4,7 @@ import backend.xml.XmlReader;
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.basic.BasicBorders;
 import javax.xml.bind.annotation.XmlType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,18 +20,39 @@ public class PanelChoixOptionsCours extends JPanel{
 
     private List<PanelChoixCours> panelChoixCoursList;
     private List<Object> listChoixCoursSimple;
+    private List<SimpleCourse> ListeCoursSimpleFinal;
     private int numeroOptionsUntiedToProgram;
     private JLabel identifiantOptions;
     private JLabel semestreOptions;
     private JButton addButtonCours;
     private JPanel panelContainerCours;
+    private JLabel ECTS;
     private int numeroCoursIn;
     private JFormattedTextField nameOptions;
     public int getNumberCoursOptions() {
         return numberCoursOptions;
     }
+    private void EctsCount(){
+        int etcs=0;
+        for(int i=0;i<ListeCoursSimpleFinal.size();i++)
+        {
+            etcs+=ListeCoursSimpleFinal.get(i).getCredits();
+
+        }
+       ECTS.setText(""+etcs);
+    }
+    private void GenerationId()
+    {
+        String idGene= new String("");
+        for(int i=0;i<ListeCoursSimpleFinal.size();i++)
+        {
+            idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
+            idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
+        }
+        identifiantOptions.setText(nameOptions.getText()+idGene);
+    }
     public OptionCourse getlistChoixCoursSimple(){
-        List<SimpleCourse> ListeCoursSimpleFinal=new ArrayList<>();
+        ListeCoursSimpleFinal=new ArrayList<>();
 
         for(int i=0;i<listChoixCoursSimple.size();i++)
         {
@@ -39,18 +61,34 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-
+        GenerationId();
         return new OptionCourse(this.identifiantOptions.getText(),this.nameOptions.getText(),ListeCoursSimpleFinal);
     }
+    public CompositeCourse getlistChoixCoursSimpleAsComposite(){
+        ListeCoursSimpleFinal=new ArrayList<>();
 
-    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions)
+        for(int i=0;i<listChoixCoursSimple.size();i++)
+        {
+            if(listChoixCoursSimple.get(i)!="NULL")
+            {
+                ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
+            }
+        }
+        GenerationId();
+        EctsCount();
+        return new CompositeCourse(this.identifiantOptions.getText(),this.nameOptions.getText(),ListeCoursSimpleFinal);
+    }
+    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo)
     {
         super();
-        JLabel WIP=new JLabel("Work in Progress");
         this.numeroCoursIn=0;
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
         this.nameOptions= new JFormattedTextField("nom");
+        nameOptions.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.ECTS=new JLabel("ECTS");
+        ECTS.setBorder(BorderFactory.createLineBorder(Color.black));
+        nameOptions.setMaximumSize(new Dimension(200,50));
         nameOptions.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -62,16 +100,21 @@ public class PanelChoixOptionsCours extends JPanel{
             @Override
             public void focusLost(FocusEvent e) {
             }});
-        setBorder(new TitledBorder("Options"+(numberCoursOptions+1)));
+        setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
         setSize(new Dimension(width,50));
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         identifiantOptions = new JLabel("ID");
+        identifiantOptions.setBorder(BorderFactory.createLineBorder(Color.black));
         semestreOptions = new JLabel("Semestre");
+        semestreOptions.setBorder(BorderFactory.createLineBorder(Color.black));
 
         JPanel panelInfoOptions = new JPanel();
         panelInfoOptions.setLayout(new BoxLayout(panelInfoOptions,BoxLayout.X_AXIS));
+        panelInfoOptions.setPreferredSize(new Dimension(width/3,50));
+        panelInfoOptions.add(nameOptions);
         panelInfoOptions.add(identifiantOptions);
         panelInfoOptions.add(semestreOptions);
+        panelInfoOptions.add(ECTS);
 
 
         panelContainerCours = new JPanel();
