@@ -40,7 +40,7 @@ public class NewCourse extends JPanel{
         semestre.setName("semestre");
         semestre.addItem("Semestre 1");
         semestre.addItem("Semestre 2");
-        semestre.addItem("Semestre 3");
+       semestre.addItem("Semestre 3");
         semestre.addItem("Semestre 4");
         semestre.addItem("Semestre 5");
         semestre.addItem("Semestre 6");
@@ -79,7 +79,7 @@ public class NewCourse extends JPanel{
     public Object getCourse(){
         if(isStringInt(ECTS.getValue().toString())) {
             if (!((name.getValue().equals("")) || Character.isSpaceChar(name.getValue().toString().charAt(0)))) {
-                identifiant.setText("" + name.getValue().toString().charAt(0) + name.getValue().toString().charAt(1) +" "+ semestre.getSelectedItem().toString().charAt(9));
+                identifiant.setText(("" + name.getValue().toString().charAt(0) + name.getValue().toString().charAt(1) + semestre.getSelectedItem().toString().charAt(9)+number).toUpperCase());
                 List<String> contenu = new ArrayList();
                 contenu.add(name.getValue().toString());
                 contenu.add(identifiant.getText());

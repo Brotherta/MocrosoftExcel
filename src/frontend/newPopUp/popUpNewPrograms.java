@@ -26,7 +26,7 @@ public class popUpNewPrograms extends JFrame {
     private int numberCoursOptions;
     private int numberCoursComposite;
     private List<Course> courseList;
-
+    Data data;
     private List<Object> NewCourseListProgram;
     private List<Object> NewCourseOptionsListProgram;
     private List<Object> NewCourseCompositeListProgram;
@@ -35,16 +35,18 @@ public class popUpNewPrograms extends JFrame {
     private List<OptionCourse> NewCourseOptionsListProgramFinal;
     private List<CompositeCourse> NewCourseCompositeListProgramFinal;
 
-    popUpNewPrograms(){
+    popUpNewPrograms(List<Course> courseList,Data data){
         super("new Program");
-        Data data=new Data();
+        //Data data=new Data();
+        this.data=data;
+        this.courseList=courseList;
         this.NewCourseListProgram=new ArrayList<>();
         this.NewCourseOptionsListProgram=new ArrayList<>();
         this.NewCourseCompositeListProgram=new ArrayList<>();
        // this.NewCourseListProgramFinal=new ArrayList<>();           //Reinitialiser a chaque
        // this.NewCourseOptionsListProgramFinal=new ArrayList<>();    //revalidation de cours
        // this.NewCourseCompositeListProgramFinal=new ArrayList<>();  //pour évité un stack de faux
-        courseList= data.getCourseList();
+        //courseList= data.getCourseList();
         ////
         setMinimumSize(new Dimension(width,720));
         setPreferredSize(new Dimension(width,720));
@@ -325,7 +327,9 @@ public class popUpNewPrograms extends JFrame {
         Terminer.addActionListener(terminerPage -> {
             System.out.println("Creation du programme : ");
             Program program = new Program(identifiant.getText(),nomProgramme.getText(),NewCourseListProgramFinal,NewCourseOptionsListProgramFinal,NewCourseCompositeListProgramFinal);
-            System.out.println(program);
+            data.addProgram(program);
+            dispose();
+            //System.out.println(program);
         });
         PanelFin.add(Terminer,BorderLayout.EAST);
         panelGlobale.add(PanelFin,BorderLayout.SOUTH);
@@ -336,8 +340,8 @@ public class popUpNewPrograms extends JFrame {
         setVisible(true);
 
     }
-
+/*
     public static void main(String[] args) {
         new popUpNewPrograms();
-    }
+    }*/
 }

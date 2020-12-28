@@ -10,9 +10,9 @@ public class PopUpNewCourse extends JFrame {
     List<Object> ContenuPanels;
     private int number=0;
     Data data;
-    public PopUpNewCourse() {
+    public PopUpNewCourse(Data data) {
         super("NewCourse");
-        data=new Data();
+        this.data=data;
         ContenuPanels = new ArrayList<>();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -121,8 +121,8 @@ public class PopUpNewCourse extends JFrame {
         add(panelGlob);
         setVisible(true);
     }
-    /*
-    public static void main(String[] args) {
+
+    /*public static void main(String[] args) {
         new PopUpNewCourse();
     }*/
 }

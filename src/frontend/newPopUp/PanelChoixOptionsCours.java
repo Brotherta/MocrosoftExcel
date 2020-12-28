@@ -49,7 +49,7 @@ public class PanelChoixOptionsCours extends JPanel{
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
         }
-        identifiantOptions.setText(nameOptions.getText()+idGene);
+        identifiantOptions.setText((nameOptions.getText()+idGene).toUpperCase());
     }
     public OptionCourse getlistChoixCoursSimple(){
         ListeCoursSimpleFinal=new ArrayList<>();
@@ -88,7 +88,7 @@ public class PanelChoixOptionsCours extends JPanel{
         nameOptions.setBorder(BorderFactory.createLineBorder(Color.black));
         this.ECTS=new JLabel("ECTS");
         ECTS.setBorder(BorderFactory.createLineBorder(Color.black));
-        nameOptions.setMaximumSize(new Dimension(200,50));
+        nameOptions.setMaximumSize(new Dimension(100,50));
         nameOptions.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -190,6 +190,8 @@ public class PanelChoixOptionsCours extends JPanel{
                 annuler.addActionListener(e2->{
                     listChoixCoursSimple.set(panelChoixCours.getNumberCoursSimple(),"NULL");
                     panelContainerCours.remove(panelTmp);
+                    revalidate();
+                    repaint();
 
                 });
                 JButton Cree=new JButton("V");
