@@ -4,6 +4,13 @@ package backend.course;
 
 import java.util.List;
 
+/*
+Cours composite
+base de cours + liste des cours qui le compose
+constructeur + getCompositeList
+
+ */
+
 
 public class CompositeCourse extends AbstractCourse {
     private List<SimpleCourse> compositeList;

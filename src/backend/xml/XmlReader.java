@@ -12,6 +12,14 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Fonction:
+readStudent(List<Course> courses)
+readCourse();
+readProgram(List<Course> courseList)
+ */
+
+
 public class XmlReader {
 
     public static List<Student> readStudent(List<Course> courses) {
@@ -74,15 +82,16 @@ public class XmlReader {
 
     public static List<Program> readProgram(List<Course> courseList)  {
         List<Program> programs = new ArrayList<>();
-        List<SimpleCourse> simples = new ArrayList<>();
-        List<OptionCourse> options = new ArrayList<>();
-        List<CompositeCourse> composites = new ArrayList<>();
 
         XmlBny reader = new XmlBny("data/data.xml");
         Element root = reader.getRoot();
 
         List xmlProgramList = XmlBny.getChildren(root, "program");
         for (Object o1 : xmlProgramList) {
+            List<SimpleCourse> simples = new ArrayList<>();
+            List<OptionCourse> options = new ArrayList<>();
+            List<CompositeCourse> composites = new ArrayList<>();
+
             Element xmlProgram = (Element) o1;
 
             String ProgramName = xmlProgram.getElementsByTagName("name").item(0).getTextContent();
