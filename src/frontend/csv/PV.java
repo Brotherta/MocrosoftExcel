@@ -47,7 +47,7 @@ public class PV {
 
 
     //////// Faire le PV
-    public void makePV() throws Exception {
+    public void makePV() {
         List<String[]> toWrite = new ArrayList<String[]>();
         toWrite.add(getHeader());
         for (Student student : studentList){
@@ -62,7 +62,7 @@ public class PV {
         csvBuilder(toWrite,filename);
     }
 
-    private void csvBuilder(List<String[]> toWrite, String filename) throws Exception{
+    private void csvBuilder(List<String[]> toWrite, String filename) {
         try (FileWriter writer = new FileWriter(filename)){
             for (String[] strings : toWrite){
                 for ( int i =0; i < strings.length; i++){

@@ -87,6 +87,7 @@ public class XmlWriter {
             Node.appendChild(item);
         }
     }
+
     private static void updateXml(Document doc) {
         try {
             Source xmlInput = new DOMSource(doc);

@@ -6,12 +6,13 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-public class PopUpNewCourse extends JFrame {
+
+public class PopUpNewCourse extends JDialog {
     List<Object> ContenuPanels;
     private int number=0;
     Data data;
-    public PopUpNewCourse(Data data) {
-        super("NewCourse");
+    public PopUpNewCourse(Data data, JFrame main, boolean bool) {
+        super(main, bool);
         this.data=data;
         ContenuPanels = new ArrayList<>();
 
