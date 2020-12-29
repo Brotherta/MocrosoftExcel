@@ -1,5 +1,10 @@
 package backend.course;
 
+/*
+Base de la forme d'un cours,
+un id, un nom, un nombre de crédits
+*/
+
 public abstract class AbstractCourse implements Course {
 
     protected String id;
