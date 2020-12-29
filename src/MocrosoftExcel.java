@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 public class MocrosoftExcel extends JFrame {
     int iterator;
@@ -150,7 +151,8 @@ public class MocrosoftExcel extends JFrame {
     private void addClose(JPanel activeFilter, Filter filter, Data data, JButton newFilter, Student student, Course course, Program program) {
         JButton close = new JButton();
         try {
-            Image img = ImageIO.read(getClass().getResource("resources/close.png"));
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            Image img = ImageIO.read(Objects.requireNonNull(classLoader.getResource("resources/close.png")));
             close.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             e.printStackTrace();
