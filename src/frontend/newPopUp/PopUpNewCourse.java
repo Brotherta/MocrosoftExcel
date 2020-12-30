@@ -10,8 +10,8 @@ public class PopUpNewCourse extends JDialog {
     List<Object> ContenuPanels;
     private int number=0;
     Data data;
-    public PopUpNewCourse(Data data) {
-        super();
+    public PopUpNewCourse(Data data, JFrame main, boolean bool) {
+        super(main, bool);
         this.data=data;
         ContenuPanels = new ArrayList<>();
 

@@ -13,7 +13,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
-public class popUpNewPrograms extends JFrame {
+public class popUpNewPrograms extends JDialog {
 
     JPanel panelGlobale; // Contient PanelInfoProgramme (North) , PanelCours(Center), PanelFin(SOUTH)
     JPanel panelInfoProgramme; // Contient FormatedTextField nom, ComboBOx semestre, Label ID
@@ -32,8 +32,8 @@ public class popUpNewPrograms extends JFrame {
     private List<OptionCourse> NewCourseOptionsListProgramFinal;
     private List<CompositeCourse> NewCourseCompositeListProgramFinal;
 
-    popUpNewPrograms(List<Course> courseList,Data data){
-        super("new Program");
+    popUpNewPrograms(List<Course> courseList,Data data, JFrame main, boolean bool){
+        super(main,bool);
         //Data data=new Data();
         this.data=data;
         this.courseList=courseList;

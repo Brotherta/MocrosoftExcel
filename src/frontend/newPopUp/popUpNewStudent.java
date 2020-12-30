@@ -13,7 +13,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class popUpNewStudent extends JFrame {
+public class popUpNewStudent extends JDialog {
 
 private int width = 1200;
 private int height = 720;
@@ -46,8 +46,8 @@ private JPanel panelGlobale;
     private final List<Program> programList;
 
 
-popUpNewStudent(List<Program> programList,List<Course> courseList,Data data){
-    super("Nouvel etudiant");
+popUpNewStudent(List<Program> programList,List<Course> courseList,JFrame main, boolean bool){
+    super(main,bool);
     this.programList=programList;
     this.choixOptionsCours=new ArrayList<>();
     this.NewCourseListProgram=new ArrayList<>();
@@ -435,10 +435,10 @@ private JPanel printOptionCourse(OptionCourse course){
     }
 
 ///////////////////////////////////////////// Fin Code extrait de ViewProgram
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         Data data=new Data();
         List listProgram=data.getProgramList();
         List listCourse=data.getCourseList();
         new popUpNewStudent(listProgram,listCourse,data);
-    }
+    }*/
 }
