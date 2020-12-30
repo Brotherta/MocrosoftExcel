@@ -32,7 +32,7 @@ public class popUpNewPrograms extends JDialog {
     private List<OptionCourse> NewCourseOptionsListProgramFinal;
     private List<CompositeCourse> NewCourseCompositeListProgramFinal;
 
-    popUpNewPrograms(List<Course> courseList,Data data, JFrame main, boolean bool){
+    public popUpNewPrograms(List<Course> courseList,Data data, JFrame main, boolean bool){
         super(main,bool);
         //Data data=new Data();
         this.data=data;

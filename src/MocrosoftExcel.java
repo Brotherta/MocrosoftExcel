@@ -5,6 +5,8 @@ import backend.student.Student;
 import frontend.Excel.ExcelPanel;
 import frontend.Excel.Filter;
 import frontend.csv.ViewProgram;
+import frontend.newPopUp.popUpNewPrograms;
+import frontend.newPopUp.popUpNewStudent;
 import frontend.utils.StartFrame;
 import frontend.csv.PV;
 import frontend.newPopUp.PopUpNewCourse;
@@ -149,6 +151,14 @@ public class MocrosoftExcel extends JFrame {
         });
         viewProgramButton.addActionListener(e1 -> {
             new ViewProgram(data.getProgramList().get(0), data);
+        });
+        newProgramButton.addActionListener(e1 -> {
+            new popUpNewPrograms(data.getCourseList(), data, this, true);
+            updateExcel(filter, data);
+        });
+        newStudentButton.addActionListener(e1 -> {
+            new popUpNewStudent(data.getProgramList(), data.getCourseList(), data, this, true);
+            updateExcel(filter, data);
         });
         i1.addActionListener(e1 -> {
             StartFrame sf = new StartFrame(this, true);
