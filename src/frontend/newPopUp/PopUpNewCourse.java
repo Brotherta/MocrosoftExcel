@@ -120,9 +120,9 @@ public class PopUpNewCourse extends JDialog {
         add(panelGlob);
         setVisible(true);
     }
-
+/*
     public static void main(String[] args) {
         Data data = new Data();
         new PopUpNewCourse(data);
-    }
+    }*/
 }

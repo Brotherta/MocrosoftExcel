@@ -365,11 +365,11 @@ public class popUpNewPrograms extends JFrame {
         System.out.println(newFinal);
         return newFinal;
     }
-
+/*
     public static void main(String[] args) {
         Data data=new Data();
         List list=data.getCourseList();
         list.add(new SimpleCourse("test","TEST",8));
         new popUpNewPrograms(list,data);
-    }
+    }*/
 }
