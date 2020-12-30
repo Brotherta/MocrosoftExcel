@@ -8,16 +8,36 @@ import backend.program.Program;
 import backend.student.Grade;
 import backend.student.Student;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XmlReader {
+/*
+Fonction:
+readStudent(List<Course> courses)
+readCourse();
+readProgram(List<Course> courseList)
+ */
 
-    public static List<Student> readStudent(List<Course> courses) {
+
+public class XmlReader {
+    private final String path;
+    private XmlBny reader;
+    private Element root;
+
+
+    public XmlReader(String path) throws IOException, ParserConfigurationException, SAXException {
+        this.path = path;
+        this.reader = new XmlBny(path, false);
+        this.root = reader.getRoot();
+    }
+
+    public List<Student> readStudent(List<Course> courses) {
         List<Student> students = new ArrayList<>();
-        XmlBny reader = new XmlBny("data/data.xml");
-        Element root = reader.getRoot();
 
         List studentList = XmlBny.getChildren(root, "student");
         for (int i = 0; i < studentList.size(); i++) {
@@ -51,11 +71,8 @@ public class XmlReader {
         return students;
     }
 
-    public static List<Course> readCourse() {
+    public List<Course> readCourse() {
         List<Course> courses = new ArrayList<>();
-
-        XmlBny reader = new XmlBny("data/data.xml");
-        Element root = reader.getRoot();
 
         List courseList = XmlBny.getChildren(root, "course");
         for (Object o : courseList) {
@@ -72,18 +89,15 @@ public class XmlReader {
     }
 
 
-    public static List<Program> readProgram(List<Course> courseList)  {
+    public List<Program> readProgram(List<Course> courseList)  {
         List<Program> programs = new ArrayList<>();
-
-
-        XmlBny reader = new XmlBny("data/data.xml");
-        Element root = reader.getRoot();
 
         List xmlProgramList = XmlBny.getChildren(root, "program");
         for (Object o1 : xmlProgramList) {
             List<SimpleCourse> simples = new ArrayList<>();
             List<OptionCourse> options = new ArrayList<>();
             List<CompositeCourse> composites = new ArrayList<>();
+
             Element xmlProgram = (Element) o1;
 
             String ProgramName = xmlProgram.getElementsByTagName("name").item(0).getTextContent();

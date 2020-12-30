@@ -271,12 +271,8 @@
         <surname>Michele</surname>
         <program>SLINF3 180</program>
         <grade>
-            <item>SLUIN501</item>
-            <value>5.1</value>
-        </grade>
-        <grade>
             <item>SLUIN502</item>
-            <value>2.6</value>
+            <value>ABI</value>
         </grade>
         <grade>
             <item>SLUIN601</item>
