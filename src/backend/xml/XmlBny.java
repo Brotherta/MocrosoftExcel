@@ -1,5 +1,6 @@
 package backend.xml;
 
+import frontend.Excel.ExcelPanel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -10,6 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +21,32 @@ public class XmlBny {
     private File file;
     private Element root;
 
-    XmlBny(String path) {
+    XmlBny(String path, boolean newFile)  {
         try {
             file = new File(path);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            doc = dBuilder.parse(file); // ouverture et lecture du fichier XML
-            doc.getDocumentElement().normalize(); // normalise le contenu du fichier, opération très conseillée
-            root = doc.getDocumentElement(); // la racine de l'arbre XML
+            if (newFile) {
+                try {
 
+                    doc = dBuilder.parse(file); // ouverture et lecture du fichier XML
+                    doc.getDocumentElement().normalize(); // normalise le contenu du fichier, opération très conseillée
+                    root = doc.getDocumentElement(); // la racine de l'arbre XML
+                } catch (FileNotFoundException e) {
+                    doc = dBuilder.newDocument();
+                    root = doc.getDocumentElement();
+                }
+            }
+            else {
+                doc = dBuilder.parse(file); // ouverture et lecture du fichier XML
+                doc.getDocumentElement().normalize(); // normalise le contenu du fichier, opération très conseillée
+                root = doc.getDocumentElement(); // la racine de l'arbre XML
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public Document getDoc() {
         return doc;

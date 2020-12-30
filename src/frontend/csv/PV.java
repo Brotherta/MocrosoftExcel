@@ -272,11 +272,11 @@ public class PV {
 
 
 
-    public static void main(String[] args) throws Exception {
-        Data data = new Data();
-        Program program = data.getProgramList().get(0);
-        PV pv = new PV(program,data);
-        pv.makePV();
-    }
+//    public static void main(String[] args) throws Exception {
+//        Data data = new Data();
+//        Program program = data.getProgramList().get(0);
+//        PV pv = new PV(program,data);
+//        pv.makePV();
+//    }
 
 }

@@ -1,6 +1,6 @@
 package frontend.newPopUp;
 
-import backend.xml.XmlReader;
+
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

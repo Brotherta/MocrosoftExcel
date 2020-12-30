@@ -1,6 +1,5 @@
 package frontend.newPopUp;
 
-import backend.xml.XmlReader;
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -14,6 +13,7 @@ import java.awt.event.FocusListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+
 public class PanelChoixOptionsCours extends JPanel{
     private List<Course> courseList;
     private int numberCoursOptions;
@@ -29,6 +29,7 @@ public class PanelChoixOptionsCours extends JPanel{
     private JLabel ECTS;
     private int numeroCoursIn;
     private JFormattedTextField nameOptions;
+
     public int getNumberCoursOptions() {
         return numberCoursOptions;
     }

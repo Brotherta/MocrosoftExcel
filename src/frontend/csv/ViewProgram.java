@@ -16,10 +16,8 @@ import java.util.List;
 
 public class ViewProgram extends JFrame {
 
-    public ViewProgram(Program program){
+    public ViewProgram(Program program, Data data){
         super("View Program");
-        Data data = new Data();
-
 
         ///// Header Panel
         JPanel headerPanel = new JPanel();
@@ -179,10 +177,10 @@ public class ViewProgram extends JFrame {
 
 
 
-    public static void main(String[] args) {
-        Data data = new Data();
-        Program program = data.getProgramList().get(0);
-        JFrame viewProgram = new ViewProgram(program);
-    }
+//    public static void main(String[] args) {
+//        Data data = new Data();
+//        Program program = data.getProgramList().get(0);
+//        JFrame viewProgram = new ViewProgram(program);
+//    }
 
 }

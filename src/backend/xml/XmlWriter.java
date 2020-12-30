@@ -6,18 +6,28 @@ import backend.student.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
-import javax.naming.Name;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class XmlWriter {
+    private final String path;
+    private final XmlBny writer;
 
-    public static void writeInXml(List<Object> buffer) {
-        XmlBny writer = new XmlBny("data/data.xml");
+
+    public XmlWriter(String path) {
+        this.path = path;
+        this.writer = new XmlBny(path, true);
+    }
+
+
+    public void writeInXml(List<Object> buffer)  {
         Document doc = writer.getDoc();
         Element root = writer.getRoot();
 
@@ -36,8 +46,7 @@ public class XmlWriter {
         updateXml(doc);
     }
 
-    public static void removeStudent(String id) {
-        XmlBny writer = new XmlBny("data/data.xml");
+    public void removeStudent(String id)  {
         Document doc = writer.getDoc();
         Element root = writer.getRoot();
 
@@ -52,8 +61,7 @@ public class XmlWriter {
         updateXml(doc);
     }
 
-    public static void modifyGrade(String studentId, String gradeId, String grade) {
-        XmlBny writer = new XmlBny("data/data.xml");
+    public void modifyGrade(String studentId, String gradeId, String grade) {
         Document doc = writer.getDoc();
         Element root = writer.getRoot();
 
@@ -76,7 +84,7 @@ public class XmlWriter {
         updateXml(doc);
     }
 
-    public static void modifyGrade(String studentId, String gradeId) {
+    public void modifyGrade(String studentId, String gradeId) {
         modifyGrade(studentId, gradeId, "-2");
     }
 
@@ -88,10 +96,10 @@ public class XmlWriter {
         }
     }
 
-    private static void updateXml(Document doc) {
+    private void updateXml(Document doc) {
         try {
             Source xmlInput = new DOMSource(doc);
-            StreamResult xmlOutput = new StreamResult(new File("datav2.xml"));
+            StreamResult xmlOutput = new StreamResult(new File(path));
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             transformerFactory.setAttribute("indent-number", 2);
