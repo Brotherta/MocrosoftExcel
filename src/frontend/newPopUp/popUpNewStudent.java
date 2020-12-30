@@ -46,7 +46,7 @@ private JPanel panelGlobale;
     private final List<Program> programList;
 
 
-popUpNewStudent(List<Program> programList,List<Course> courseList,JFrame main, boolean bool){
+public popUpNewStudent(List<Program> programList,List<Course> courseList, Data data,  JFrame main, boolean bool){
     super(main,bool);
     this.programList=programList;
     this.choixOptionsCours=new ArrayList<>();
