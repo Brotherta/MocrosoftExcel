@@ -6,7 +6,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class PopUpNewCourse extends JDialog {
     List<Object> ContenuPanels;
     private int number=0;
@@ -58,7 +57,6 @@ public class PopUpNewCourse extends JDialog {
             JButton Creer=new JButton("Creer");
             paneltmp.add(Creer);
             Creer.addActionListener(e3->{
-
                 ContenuPanels.set(newCourse.getNumber(),newCourse.getCourse());
             });
             mainPanel.revalidate();
@@ -122,8 +120,9 @@ public class PopUpNewCourse extends JDialog {
         add(panelGlob);
         setVisible(true);
     }
-
-    /*public static void main(String[] args) {
-        new PopUpNewCourse();
+/*
+    public static void main(String[] args) {
+        Data data = new Data();
+        new PopUpNewCourse(data);
     }*/
 }
