@@ -24,6 +24,7 @@ public class PanelChoixCours extends JPanel {
         super();
         this.numberCoursSimple=numberCoursSimple;
         setBorder(new TitledBorder("Cours"));
+        setBorder(BorderFactory.createLineBorder(Color.black));
         setSize(new Dimension(width,50));
         setLayout(new FlowLayout());
         //xml= new XmlReader();
@@ -80,7 +81,7 @@ public class PanelChoixCours extends JPanel {
     {
         name.removeAllItems();
         name.addItem(course.getName());
-        this.setBackground(Color.LIGHT_GRAY);
+        this.setBackground(Color.GREEN);
         return this.course;
     }
 
