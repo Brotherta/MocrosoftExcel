@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class popUpNewStudent extends JDialog {
@@ -21,7 +22,7 @@ private JPanel panelGlobale;
     private JPanel panelInfoStudent;
         private JFormattedTextField nomStudent;
         private JFormattedTextField prenomStudent;
-        private JFormattedTextField idStudent;
+        private JLabel idStudent;
     private JPanel panelProgram;
         private JComboBox nameProgram;
         private JPanel panelCoursTiedToProgram;
@@ -58,45 +59,15 @@ public popUpNewStudent(List<Program> programList,List<Course> courseList, Data d
         /////////////////// Info etudiant
         panelInfoStudent=new JPanel();
         panelInfoStudent.setLayout(new BoxLayout(panelInfoStudent,BoxLayout.X_AXIS));
-        nomStudent=new JFormattedTextField("Nom");
-        nomStudent.setMaximumSize(new Dimension(200,50));
-        nomStudent.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if(nomStudent.getValue().toString()=="Nom" || (nomStudent.getValue().toString()==("Nom non remplie"))) {
-                    nomStudent.setValue("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
-         prenomStudent=new JFormattedTextField("Prenom");
-        prenomStudent.setMaximumSize(new Dimension(200,50));
-        prenomStudent.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if(prenomStudent.getValue().toString()=="Prenom" || (prenomStudent.getValue().toString()==("Prenom non remplie"))) {
-                    prenomStudent.setValue("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
-         idStudent=new JFormattedTextField("N etudiant");
-        idStudent.setMaximumSize(new Dimension(200,50));
-        prenomStudent.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if(idStudent.getValue().toString()=="N etudiant" || (idStudent.getValue().toString()==("N etudiant non remplie"))) {
-                    idStudent.setValue("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });
+            nomStudent=new JFormattedTextField();
+            nomStudent.setBorder(new TitledBorder("Nom"));
+            nomStudent.setMaximumSize(new Dimension(200,50));
+            prenomStudent=new JFormattedTextField();
+             prenomStudent.setBorder(new TitledBorder("Prenom"));
+            prenomStudent.setMaximumSize(new Dimension(200,50));
+            idStudent=new JLabel(generateIdStudent());
+            idStudent.setBorder(new TitledBorder("Id etud"));
+            idStudent.setMaximumSize(new Dimension(200,50));
         panelInfoStudent.setPreferredSize(new Dimension(width/2,height/20));
         panelInfoStudent.add(nomStudent);
         panelInfoStudent.add(prenomStudent);
@@ -271,19 +242,23 @@ public popUpNewStudent(List<Program> programList,List<Course> courseList, Data d
                 {
                     listGrade.add(new Grade(-2,Cours.get(i)));
                 }
-                for(int i=0;i<CoursOptionnel.size();i++)
+                for(int i=0;i<choixOptionsCours.size();i++)
                 {
-                    listGrade.add(new Grade(-2,CoursOptionnel.get(i)));
+                    listGrade.add(new Grade(-2,choixOptionsCours.get(i)));
                 }
                 for(int i=0;i<CoursComposite.size();i++)
                 {
-                    listGrade.add(new Grade(-2,CoursComposite.get(i)));
+                    List<SimpleCourse> listTmp=new ArrayList(CoursComposite.get(i).getCompositeList());
+                    for(int j=0;j<listTmp.size();j++)
+                    {
+                        listGrade.add(new Grade(-2, listTmp.get(j)));
+                    }
                 }
                 for(int i=0;i<NewCourseListProgramFinal.size();i++)
                 {
                     listGrade.add(new Grade(-2,NewCourseListProgramFinal.get(i)));
                 }
-                Student student =  new Student(nomStudent.getText(),prenomStudent.getText(),idStudent.getText(),programList.get(nameProgram.getSelectedIndex()).getId(),listGrade);
+                Student student =  new Student(nomStudent.getText(),prenomStudent.getText(), idStudent.getText(),programList.get(nameProgram.getSelectedIndex()).getId(),listGrade);
                 System.out.println("Nom : "+student.getName()+"Liste :"+student.getGradeList());
                 data.addStudent(student);
                 dispose();
@@ -301,7 +276,14 @@ public popUpNewStudent(List<Program> programList,List<Course> courseList, Data d
     setVisible(true);
 
 }
-//////////Tweak
+
+    private String generateIdStudent() {
+        int Year = Calendar.getInstance().get(Calendar.YEAR);
+        return ""+Year+data.getCourseList().size();
+
+    }
+
+    //////////Tweak
 private JPanel printOptionCourseTweak(OptionCourse course){
     JPanel optionCourses = printMultipleSimpleCoursesTweak(course.getOptionList());
     choixOptionsCours.add(null);

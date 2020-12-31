@@ -12,17 +12,18 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 public class PanelChoixOptionsCours extends JPanel{
+    private final String prefixeId;
     private List<Course> courseList;
     private int numberCoursOptions;
     private List<Object> listChoixCoursSimple;
     private List<SimpleCourse> ListeCoursSimpleFinal;
-    private JLabel identifiantOptions;
-    private JLabel semestreOptions;
+    private JTextField identifiantOptions;
+    private JTextField semestreOptions;
     private JButton addButtonCours;
     private JPanel panelContainerCours;
-    private JLabel ECTS;
+    private JTextField ECTS;
     private int numeroCoursIn;
-    private JFormattedTextField nameOptions;
+
     private int width;
     public int getNumberCoursOptions() {
         return numberCoursOptions;
@@ -73,7 +74,7 @@ public class PanelChoixOptionsCours extends JPanel{
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
         }
-        identifiantOptions.setText((nameOptions.getText()+idGene).toUpperCase());
+        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+(numberCoursOptions+1));
     }
     public OptionCourse getlistChoixCoursSimple(){
         ListeCoursSimpleFinal=new ArrayList<>();
@@ -93,7 +94,7 @@ public class PanelChoixOptionsCours extends JPanel{
             }
             ECTS.setText("" + ListeCoursSimpleFinal.get(0).getCredits());
             GenerationId();
-            return new OptionCourse(this.identifiantOptions.getText(), this.nameOptions.getText(), ListeCoursSimpleFinal);
+            return new OptionCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
         }
         return null;
     }
@@ -111,11 +112,11 @@ public class PanelChoixOptionsCours extends JPanel{
             GenerationId();
             int ects = EctsCount();
             ECTS.setText("" + ects);
-            return new CompositeCourse(this.identifiantOptions.getText(), this.nameOptions.getText(), ListeCoursSimpleFinal);
+            return new CompositeCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
         }
         return null;
     }
-    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo)
+    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo,String prefixeId)
     {
         super();
         setOpaque(false);
@@ -124,38 +125,35 @@ public class PanelChoixOptionsCours extends JPanel{
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
         this.width=width;
-        this.nameOptions= new JFormattedTextField("nom");
-        nameOptions.setBorder(BorderFactory.createLineBorder(Color.black));
-        this.ECTS=new JLabel("ECTS");
-        ECTS.setBorder(BorderFactory.createLineBorder(Color.black));
-        nameOptions.setMaximumSize(new Dimension(100,50));
-        nameOptions.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if((nameOptions.getValue().toString()=="nom")||(nameOptions.getValue().toString()=="a remplir"))
-                {
-                    nameOptions.setValue("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }});
+        this.prefixeId=prefixeId;
+
         setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
         setBorder(BorderFactory.createLineBorder(Color.black));
-        setSize(new Dimension(width,50));
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        identifiantOptions = new JLabel("ID");
-        identifiantOptions.setBorder(BorderFactory.createLineBorder(Color.black));
-        semestreOptions = new JLabel("Semestre");
-        semestreOptions.setBorder(BorderFactory.createLineBorder(Color.black));
+        setLayout(new BorderLayout());
+
+        JPanel containerInfoOptions=new JPanel();
+        containerInfoOptions.setLayout(new BoxLayout(containerInfoOptions,BoxLayout.X_AXIS));
+        this.ECTS=new JTextField("",12);
+        this.ECTS.setBorder(new TitledBorder("ECTS"));
+        identifiantOptions = new JTextField("",12);
+        identifiantOptions.setBorder(new TitledBorder("Identifiant"));
+        identifiantOptions.setSize(new Dimension(width,70));
+        semestreOptions = new JTextField("",12);
+        semestreOptions.setMaximumSize(new Dimension(width,70));
+        semestreOptions.setBorder(new TitledBorder("Semestre"));
+
         JPanel panelInfoOptions = new JPanel();
+        panelInfoOptions.setBorder(new TitledBorder("TEST"));
         panelInfoOptions.setOpaque(false);
-        panelInfoOptions.setLayout(new BoxLayout(panelInfoOptions,BoxLayout.X_AXIS));
-        panelInfoOptions.setPreferredSize(new Dimension(width/3,50));
-        panelInfoOptions.add(nameOptions);
-        panelInfoOptions.add(identifiantOptions);
-        panelInfoOptions.add(semestreOptions);
-        panelInfoOptions.add(ECTS);
+        panelInfoOptions.setLayout(new BorderLayout());
+        panelInfoOptions.setPreferredSize(new Dimension(width,70));
+
+
+        //containerInfoOptions.setPreferredSize(new Dimension(width,50));
+        containerInfoOptions.add(identifiantOptions);
+        containerInfoOptions.add(semestreOptions);
+        containerInfoOptions.add(ECTS);
+        panelInfoOptions.add(containerInfoOptions,BorderLayout.WEST);
         this.panelContainerCours = new JPanel();
         panelContainerCours.setOpaque(false);
         panelContainerCours.setOpaque(false);
@@ -171,13 +169,12 @@ public class PanelChoixOptionsCours extends JPanel{
                 actionAjout();
             }
         });
-        add(panelInfoOptions);
-        add(panelContainerCours);
-        add(addButtonCours);
+        add(panelInfoOptions,BorderLayout.NORTH);
+        add(panelContainerCours,BorderLayout.CENTER);
+        add(addButtonCours,BorderLayout.SOUTH);
     }
     private void actionAjout(){
         PanelChoixCours panelChoixCours=new PanelChoixCours(this.courseList,this.width,numeroCoursIn);
-
         this.numeroCoursIn++;
         listChoixCoursSimple.add("NULL");
         JPanel panelTmp=new JPanel();

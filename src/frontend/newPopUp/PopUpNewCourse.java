@@ -53,7 +53,7 @@ public class PopUpNewCourse extends JDialog {
                 mainPanel.remove(paneltmp);
                 revalidate();
                 repaint();
-                    });
+            });
             JButton Creer=new JButton("Creer");
             paneltmp.add(Creer);
             Creer.addActionListener(e3->{
