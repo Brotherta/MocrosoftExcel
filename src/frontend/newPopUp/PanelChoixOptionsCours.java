@@ -23,7 +23,7 @@ public class PanelChoixOptionsCours extends JPanel{
     private JPanel panelContainerCours;
     private JTextField ECTS;
     private int numeroCoursIn;
-
+    private int anneeProgramLie;
     private int width;
     public int getNumberCoursOptions() {
         return numberCoursOptions;
@@ -31,30 +31,36 @@ public class PanelChoixOptionsCours extends JPanel{
     private boolean setSemestre(){
         String id=ListeCoursSimpleFinal.get(0).getId();
         int j=0;
+        int numeroSemestrePremierCours=0;
         for ( j = 0; j < id.length(); j++) {
             if (Character.isDigit(id.charAt(j))) {
+                numeroSemestrePremierCours=Character.getNumericValue(id.charAt(j));
+                System.out.println("Numero du premier cours"+numeroSemestrePremierCours);
+                if(numeroSemestrePremierCours % 2 == 0){numeroSemestrePremierCours = 2;}
+                else {numeroSemestrePremierCours = numeroSemestrePremierCours%2;}
                 break;
             }
         }
-        char idToSemestre=id.charAt(j);
-
         for(int i =1;i<ListeCoursSimpleFinal.size();i++) {
             String id2=ListeCoursSimpleFinal.get(i).getId();
-            char idToSemestre2;
+            int numeroSemestreAutreCours;
             int w = 0;
             for (w=0; j < id.length(); w++) {
                 if (Character.isDigit(id2.charAt(w))) {
+                    numeroSemestreAutreCours = Character.getNumericValue(id2.charAt(w));
+                    System.out.println("Numero du Second cours"+numeroSemestreAutreCours);
+                    if(numeroSemestreAutreCours % 2 == 0){numeroSemestreAutreCours = 2;}
+                    else {numeroSemestreAutreCours = numeroSemestreAutreCours%2;}
+                    if(numeroSemestrePremierCours!=numeroSemestreAutreCours) {
+                        JOptionPane.showMessageDialog(this, "Les cours d'un meme bloc doit etre au meme semestres(1/3/5 ou 2/4/6), merci de modifier les cours");
+                        return false;
+                    }
                     break;
                 }
             }
-            idToSemestre2=id2.charAt(w);
-            if(idToSemestre!=idToSemestre2)
-            {
-                JOptionPane.showMessageDialog(this, "Les cours d'un meme bloc doit etre au meme semestres, merci de modifier les cours");
-                return false;
-            }
         }
-        semestreOptions.setText("S "+idToSemestre);
+
+        semestreOptions.setText(""+(numeroSemestrePremierCours+(anneeProgramLie-1)*2));
         return true;
     }
     private int EctsCount(){
@@ -74,7 +80,7 @@ public class PanelChoixOptionsCours extends JPanel{
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
         }
-        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+(numberCoursOptions+1));
+        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+semestreOptions.getText()+(numberCoursOptions+1));
     }
     public OptionCourse getlistChoixCoursSimple(){
         ListeCoursSimpleFinal=new ArrayList<>();
@@ -85,7 +91,7 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        if(ListeCoursSimpleFinal.size()==0){ panelContainerCours.setBackground(Color.RED);return null ;}
+        if(ListeCoursSimpleFinal.size()==0){ /*panelContainerCours.setBackground(Color.RED);*/return null ;}
         if(setSemestre()) {
             int ects = EctsCount();
             if (ects % ListeCoursSimpleFinal.get(0).getCredits() != 0) {
@@ -94,7 +100,7 @@ public class PanelChoixOptionsCours extends JPanel{
             }
             ECTS.setText("" + ListeCoursSimpleFinal.get(0).getCredits());
             GenerationId();
-            return new OptionCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+            return new OptionCourse(this.identifiantOptions.getText(), "OPTION"+(numberCoursOptions+1)+" S"+semestreOptions.getText()+" "+identifiantOptions.getText(), ListeCoursSimpleFinal);
         }
         return null;
     }
@@ -107,16 +113,16 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        if(ListeCoursSimpleFinal.size()==0){ return null ;}
+        if(ListeCoursSimpleFinal.size()==0){ /*panelContainerCours.setBackground(Color.RED);*/return null ;}
         if(setSemestre()) {
             GenerationId();
             int ects = EctsCount();
             ECTS.setText("" + ects);
-            return new CompositeCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+            return new CompositeCourse(this.identifiantOptions.getText(), "Composite"+(numberCoursOptions+1)+identifiantOptions.getText(), ListeCoursSimpleFinal);
         }
         return null;
     }
-    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo,String prefixeId)
+    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo,String prefixeId,int anneeProgramLie)
     {
         super();
         setOpaque(false);
@@ -125,8 +131,8 @@ public class PanelChoixOptionsCours extends JPanel{
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
         this.width=width;
-        this.prefixeId=prefixeId;
-
+        this.prefixeId="SL";   // ToModified
+        this.anneeProgramLie=anneeProgramLie;
         setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new BorderLayout());
@@ -134,16 +140,19 @@ public class PanelChoixOptionsCours extends JPanel{
         JPanel containerInfoOptions=new JPanel();
         containerInfoOptions.setLayout(new BoxLayout(containerInfoOptions,BoxLayout.X_AXIS));
         this.ECTS=new JTextField("",12);
+        ECTS.setEditable(false);
         this.ECTS.setBorder(new TitledBorder("ECTS"));
         identifiantOptions = new JTextField("",12);
+        identifiantOptions.setEditable(false);
         identifiantOptions.setBorder(new TitledBorder("Identifiant"));
         identifiantOptions.setSize(new Dimension(width,70));
         semestreOptions = new JTextField("",12);
+        semestreOptions.setEditable(false);
         semestreOptions.setMaximumSize(new Dimension(width,70));
         semestreOptions.setBorder(new TitledBorder("Semestre"));
 
         JPanel panelInfoOptions = new JPanel();
-        panelInfoOptions.setBorder(new TitledBorder("TEST"));
+       // panelInfoOptions.setBorder(new TitledBorder("TEST"));
         panelInfoOptions.setOpaque(false);
         panelInfoOptions.setLayout(new BorderLayout());
         panelInfoOptions.setPreferredSize(new Dimension(width,70));
