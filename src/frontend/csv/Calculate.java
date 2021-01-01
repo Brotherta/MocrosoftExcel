@@ -27,8 +27,8 @@ public class Calculate {
 
     public static double average(double[] doubleList){
         double average = 0;
-        for (int i=0; i<doubleList.length; i++){
-            average += doubleList[i];
+        for (double grade : doubleList) {
+            average += grade;
         }
         return average/doubleList.length;
     }
@@ -36,8 +36,9 @@ public class Calculate {
     public static double standartDeviation(double[] doubleList){
         double average = average(doubleList);
         double sD = 0;
-        for (int i=0; i<doubleList.length; i++){
-            sD += Math.pow(doubleList[i],2)-Math.pow(average,2);
+
+        for (double grade : doubleList) {
+            sD += Math.pow(grade,2) - Math.pow(average, 2);
         }
         sD = Math.sqrt(sD/doubleList.length);
         return sD;

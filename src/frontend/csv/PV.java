@@ -19,11 +19,11 @@ public class PV {
 
     /// Variables
     private static final char SEPARATOR = ';';
-    private Program program;
-    private List<Course> coursesList;
-    private List<Student> studentList;
-    private double[] averageYearList;
-    private double[][] gradeList;
+    private final Program program;
+    private final List<Course> coursesList;
+    private final List<Student> studentList;
+    private final double[] averageYearList;
+    private final double[][] gradeList;
 
 
     //////// Constructeur
@@ -111,16 +111,18 @@ public class PV {
         return res;
     }  // un élève
     private String[] getMinGrade(){
-        return gradeTreatement(0);
+
+        return gradeTreatment(0);
     }   // note min
     private String[] getMaxGrade(){
-        return gradeTreatement(1);
+        return gradeTreatment(1);
     }    // note max
     private String[] getAverage(){
-        return gradeTreatement(2);
+        return gradeTreatment(2);
     }    // moyenne des notes
     private String[] getStandartDeviation(){
-        return gradeTreatement(3);
+        return gradeTreatment(3);
+
     }    // ecart type des notes
 
 
@@ -128,7 +130,8 @@ public class PV {
 
     ////////// Fonctions utilitaires de calcul
 
-    private String[] gradeTreatement(int choice){
+
+    private String[] gradeTreatment(int choice){
         String[] name = {"Note min","Note max","Moyenne","Écart-type"};
         Double[] calculYear = {Calculate.min(averageYearList),Calculate.max(averageYearList),Calculate.average(averageYearList),Calculate.standartDeviation(averageYearList)};
 
@@ -154,15 +157,18 @@ public class PV {
     private double[] cleanGradeList(double[] gradeList){
         double[] newList = new double[gradeList.length];
         int indexNewList = 0;
-        for (int indexGradeList=0; indexGradeList<gradeList.length;indexGradeList++){
-            if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1))
-            {
+
+        for (int indexGradeList=0; indexGradeList<gradeList.length; indexGradeList++){
+            if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1)) {
                 newList[indexNewList] = gradeList[indexGradeList];
                 indexNewList += 1;
             }
         }
         return newList;
     }
+
+
+
 
     private double averageYearStudent(Student student){
         double average = 0;
@@ -188,7 +194,7 @@ public class PV {
     // Recuperer les données
     private List<Student> getStudent(Data data, Program program){
         List<Student> allStudentList = data.getStudentList();
-    List<Student> studentList = new ArrayList<Student>();
+    List<Student> studentList = new ArrayList<>();
         for (Student student: allStudentList){
             if (student.getProgramId().equals(program.getId())){
                 studentList.add(student);
@@ -198,21 +204,18 @@ public class PV {
     }  // List des student de program
 
     private List<Course> getCourseList( Program program){
-        List<Course> courseList = new ArrayList<Course>();
-        for( SimpleCourse simpleCourse : program.getSimpleCourseList()){
-            courseList.add(simpleCourse);
-        }
+
+        List<Course> courseList = new ArrayList<>();
+
+        courseList.addAll(program.getSimpleCourseList());
+
         for (OptionCourse optionCourse : program.getOptionCourseList()){
             courseList.add(optionCourse);
-            for (SimpleCourse courseOfOption : optionCourse.getOptionList()){
-                courseList.add(courseOfOption);
-            }
+            courseList.addAll(optionCourse.getOptionList());
         }
         for (CompositeCourse compositeCourse : program.getCompositeCoursesList()){
             courseList.add(compositeCourse);
-            for (SimpleCourse courseOfComposite : compositeCourse.getCompositeList()){
-                courseList.add(courseOfComposite);
-            }
+            courseList.addAll(compositeCourse.getCompositeList());
         }
         return courseList;
     }   // Liste des cours de program
@@ -238,22 +241,31 @@ public class PV {
         else if (course instanceof  CompositeCourse){
             int nbCredits = 0;
             int nbABI = 0;
-            res = -1;
+
+            res = 0;
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse composite : ((CompositeCourse) course).getCompositeList()){
                     if (grade.getCourse().equals(composite)){
-                        if (grade.getGrade() != -1){
+                        if (grade.getGrade() == -1){
+                            nbABI +=1;
+                        }
+                        else {
                             res += grade.getGrade()*composite.getCredits();
                             nbCredits += composite.getCredits();
                         }
                     }
                 }
             }
-            res = res/nbCredits;
-
+            if (nbABI == 3){
+                res = -1;
+            }
+            else {
+                res = res / nbCredits;
+            }
         }
         return Calculate.roundDouble(res,3);
     }    // Note de student à course
+
 
     private double[] getGrades(Course course){
         int courseIndex = coursesList.indexOf(course);
@@ -263,6 +275,7 @@ public class PV {
         }
         return grades;
     }   // Liste des notes du cours course
+
 
 
 
