@@ -84,7 +84,7 @@ public class NewCourse extends JPanel{
                 contenu.add(name.getValue().toString());
                 contenu.add(identifiant.getText());
                 contenu.add(ECTS.getValue().toString());
-                System.out.println(contenu);
+                setBackground(new Color(101, 193, 96));
                 return contenu;
             } else {
                 name.setValue("Nom non remplie");

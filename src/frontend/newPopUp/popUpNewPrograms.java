@@ -78,15 +78,25 @@ public class popUpNewPrograms extends JDialog {
         identifiant.setBorder(new TitledBorder("Identifiant"));
         identifiant.setMaximumSize(new Dimension(200,50));
         JComboBox semestre = new JComboBox();
-        semestre.setName("Annee scolaire");
-        semestre.addItem("Annee 1");
-        semestre.addItem("Annee 2");
-        semestre.addItem("Annee 3");
+        semestre.setName("Année scolaire");
+        semestre.addItem("Année");
+        semestre.addItem("Année 1");
+        semestre.addItem("Année 2");
+        semestre.addItem("Année 3");
         semestre.setMaximumSize(new Dimension(100,50));
         JButton buttonGenererId=new JButton("Generer Identifiant");
         buttonGenererId.addActionListener(e3->{
             if(nomProgramme.getText().length()>2) {
-                identifiant.setText(("SL" + nomProgramme.getText().charAt(0) + nomProgramme.getText().charAt(1) + semestre.getSelectedItem().toString().charAt(6)).toUpperCase());
+                if(semestre.getSelectedIndex()!=0) {
+                    identifiant.setText(("SL" + nomProgramme.getText().charAt(0) + nomProgramme.getText().charAt(1) + semestre.getSelectedItem().toString().charAt(6)).toUpperCase());
+                    semestre.setEnabled(false);
+                    nomProgramme.setEditable(false);
+                    semestre.setEditable(false);
+                }
+                else {
+                    JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme pour generer l'identifiant");
+                    return;
+                }
             }
             else{
                 nomProgramme.setText("Le nom doit faire +de 2 caractères");
@@ -120,6 +130,10 @@ public class popUpNewPrograms extends JDialog {
             ajoutDeCours.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if(semestre.getSelectedIndex()==0) {
+                        JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme avant d'y ajouté des cours");
+                        return;
+                    }
                     PanelChoixCours panelChoixCours= new PanelChoixCours(courseList,width/4,numberCoursSimple);
                     numberCoursSimple++;
                     NewCourseListProgram.add("NULL");
@@ -175,7 +189,16 @@ public class popUpNewPrograms extends JDialog {
             ajoutDeCours2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursOptions,"Options",identifiant.getText());
+                if(semestre.getSelectedIndex()==0) {
+                    JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme avant d'y ajouté des cours");
+                    return;
+                }
+                if(identifiant.getText().equals(""))
+                {
+                    JOptionPane.showMessageDialog(main, "Veuillez générez un identifiant avant d'ajouté des cours");
+                    return;
+                }
+                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursOptions,"Options",identifiant.getText(),(semestre.getSelectedIndex()));
                 numberCoursOptions++;
                 NewCourseOptionsListProgram.add("NULL");
                 JButton annuler=new JButton("Supprimer l'options");
@@ -236,7 +259,11 @@ public class popUpNewPrograms extends JDialog {
         ajoutDeCours3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursComposite,"Composite",identifiant.getText());
+                if(semestre.getSelectedIndex()==0) {
+                    JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme avant d'y ajouté des cours");
+                    return;
+                }
+                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursComposite,"Composite",identifiant.getText(),(semestre.getSelectedIndex()));
                 numberCoursComposite++;
                 NewCourseCompositeListProgram.add("NULL");
                 JButton annuler=new JButton("Supprimer");

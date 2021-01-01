@@ -409,7 +409,6 @@ private JPanel printOptionCourse(OptionCourse course){
                 int nb = Integer.parseInt(courseIdList[i]);
                 if(nb % 2 == 0){nb = 2;}
                 else {nb = nb%2;}
-                System.out.println(nb);
                 return nb;
             }
             catch (IllegalArgumentException e){ }

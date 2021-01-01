@@ -58,6 +58,7 @@ public class PopUpNewCourse extends JDialog {
             paneltmp.add(Creer);
             Creer.addActionListener(e3->{
                 ContenuPanels.set(newCourse.getNumber(),newCourse.getCourse());
+                newCourse.setBackground(Color.GREEN);
             });
             mainPanel.revalidate();
             mainPanel.add(paneltmp);
