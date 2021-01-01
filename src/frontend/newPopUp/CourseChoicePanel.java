@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-public class PanelChoixCours extends JPanel {
+public class CourseChoicePanel extends JPanel {
     public JLabel ECTS;
     public JComboBox name;
     public JLabel semestre;
@@ -20,7 +20,7 @@ public class PanelChoixCours extends JPanel {
 
     private Course course;
 
-    public PanelChoixCours(List<Course> courseList,int width,int numberCoursSimple) {
+    public CourseChoicePanel(List<Course> courseList, int width, int numberCoursSimple) {
         super();
         this.numberCoursSimple=numberCoursSimple;
         setBorder(new TitledBorder("Cours"));

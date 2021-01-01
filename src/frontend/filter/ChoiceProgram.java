@@ -1,4 +1,4 @@
-package frontend.Excel;
+package frontend.filter;
 
 import backend.Data;
 import backend.program.Program;
@@ -10,17 +10,17 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceProgram extends JFrame {
+public class ChoiceProgram extends JDialog {
     List<String> infos;
     GetInfosPanel getInfosPanel;
     List<Program> resultSearchProgram;
     Program program;
     JPanel inChooseProgramPanel;
 
-    public ChoiceProgram(Data data, Filter programFilter){
+    public ChoiceProgram(Data data, Filter programFilter, JFrame main, boolean bool){
 
 
-        super("Chercher un étudiant à filtrer");
+        super(main, bool);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(500,500);
@@ -32,7 +32,7 @@ public class ChoiceProgram extends JFrame {
         JLabel text = new JLabel("Entrez des mots clefs puis sélectionnez l'élève voulu:");
         textPanel.add(text);
 
-        getInfosPanel = new frontend.Excel.ChoiceProgram.GetInfosPanel();
+        getInfosPanel = new ChoiceProgram.GetInfosPanel();
         JPanel searchPanel = new JPanel();
         JButton searchButton = new JButton("Chercher");
         searchPanel.add(searchButton);
@@ -74,7 +74,7 @@ public class ChoiceProgram extends JFrame {
 
         // Fermer la fenêtre
         checkButton.addActionListener(e -> {
-            System.exit(0);
+            dispose();
         });
 
 
@@ -163,7 +163,7 @@ public class ChoiceProgram extends JFrame {
     //    public static void main(String[] args) {
 //        Data data = new Data("data/data.xml");
 //        Filter programFilter = new Filter();
-//        frontend.Excel.ChoiceProgram choiceProgram = new frontend.Excel.ChoiceProgram(data,programFilter);
+//        frontend.filter.ChoiceProgram choiceProgram = new frontend.filter.ChoiceProgram(data,programFilter);
 //    }
 
 

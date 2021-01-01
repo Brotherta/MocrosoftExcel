@@ -43,7 +43,7 @@ public class PopUpNewCourse extends JDialog {
             ContenuPanels.add("NULL");
             JPanel paneltmp=new JPanel();
             paneltmp.setLayout(new BoxLayout(paneltmp,BoxLayout.X_AXIS));
-            NewCourse newCourse = new NewCourse(number+1);
+            NewCoursePanel newCourse = new NewCoursePanel(number+1);
             this.number++;
             paneltmp.add(newCourse);
             JButton annuler=new JButton("Annuler");
@@ -89,7 +89,7 @@ public class PopUpNewCourse extends JDialog {
         ContenuPanels.add("NULL");
         JPanel paneltmp=new JPanel();
         paneltmp.setLayout(new BoxLayout(paneltmp,BoxLayout.X_AXIS));
-        NewCourse newCourse = new NewCourse(number+1);
+        NewCoursePanel newCourse = new NewCoursePanel(number+1);
         this.number++;
         paneltmp.add(newCourse);
         JButton annuler=new JButton("Annuler");

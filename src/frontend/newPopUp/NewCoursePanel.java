@@ -6,7 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
-public class NewCourse extends JPanel{
+public class NewCoursePanel extends JPanel{
     public JFormattedTextField ECTS;
     public JFormattedTextField name;
     public JComboBox semestre;
@@ -15,7 +15,7 @@ public class NewCourse extends JPanel{
     public int getNumber() {
         return number-1;
     }
-    public NewCourse(int number) {
+    public NewCoursePanel(int number) {
         super();
         this.number=number;
         setMaximumSize(new Dimension(2000, 60));

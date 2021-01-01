@@ -7,11 +7,9 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
-public class PanelChoixOptionsCours extends JPanel{
+public class MultipleChoiceCoursePanel extends JPanel{
     private final String prefixeId;
     private List<Course> courseList;
     private int numberCoursOptions;
@@ -122,7 +120,7 @@ public class PanelChoixOptionsCours extends JPanel{
         }
         return null;
     }
-    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo,String prefixeId,int anneeProgramLie)
+    MultipleChoiceCoursePanel(List<Course> courseList, int width, int numberCoursOptions, String optionsOuCompo, String prefixeId, int anneeProgramLie)
     {
         super();
         setOpaque(false);
@@ -183,7 +181,7 @@ public class PanelChoixOptionsCours extends JPanel{
         add(addButtonCours,BorderLayout.SOUTH);
     }
     private void actionAjout(){
-        PanelChoixCours panelChoixCours=new PanelChoixCours(this.courseList,this.width,numeroCoursIn);
+        CourseChoicePanel panelChoixCours=new CourseChoicePanel(this.courseList,this.width,numeroCoursIn);
         this.numeroCoursIn++;
         listChoixCoursSimple.add("NULL");
         JPanel panelTmp=new JPanel();

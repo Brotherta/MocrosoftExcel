@@ -1,4 +1,4 @@
-package frontend.csv;
+package frontend.newPopUp;
 
 import backend.Data;
 import backend.course.CompositeCourse;
@@ -25,8 +25,8 @@ public class ViewProgram extends JFrame {
         headerPanel.add(programName);
 
         // Répartition des Cours
-        List<SimpleCourse> simpleCourseList1 = new ArrayList<SimpleCourse>();
-        List<SimpleCourse> simpleCourseList2 = new ArrayList<SimpleCourse>();
+        List<SimpleCourse> simpleCourseList1 = new ArrayList<>();
+        List<SimpleCourse> simpleCourseList2 = new ArrayList<>();
         for (SimpleCourse simpleCourse : program.getSimpleCourseList()){
             if (NumSemester(simpleCourse) == 1){
                 simpleCourseList1.add(simpleCourse);
