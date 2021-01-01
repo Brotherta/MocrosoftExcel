@@ -11,7 +11,6 @@ import backend.student.Student;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,11 +19,11 @@ public class PV {
 
 
     private static final char SEPARATOR = ';';
-    private Program program;
-    private List<Course> coursesList;
-    private List<Student> studentList;
-    private double[] averageYearList;
-    private double[][] gradeList;
+    private final Program program;
+    private final List<Course> coursesList;
+    private final List<Student> studentList;
+    private final double[] averageYearList;
+    private final double[][] gradeList;
 
 
     //////// Constructeur
@@ -33,7 +32,7 @@ public class PV {
         List<Student> list = getStudent(data,program);
         Collections.sort(list,(a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         this.studentList = list;
-        this.coursesList = getCourseList(data, program);
+        this.coursesList = getCourseList(program);
         this.averageYearList = new double[studentList.size()];
         this.gradeList = new double[studentList.size()][coursesList.size()];
         for (int s=0; s<studentList.size(); s++){
@@ -62,7 +61,7 @@ public class PV {
         csvBuilder(toWrite,filename);
     }
 
-    private void csvBuilder(List<String[]> toWrite, String filename) throws Exception{
+    private void csvBuilder(List<String[]> toWrite, String filename) {
         try (FileWriter writer = new FileWriter(filename)){
             for (String[] strings : toWrite){
                 for ( int i =0; i < strings.length; i++){
@@ -83,8 +82,8 @@ public class PV {
     //////// Pour construire le csv
 
     private String[] getHeader(){
-        int resSize = this.coursesList.size() + 4;
-        String[] res = new String[resSize] ;
+        int headerSize = this.coursesList.size() + 4;
+        String[] res = new String[headerSize] ;
         res[0] = "N° Étudiant";
         res[1] = "Nom" ;
         res[2] = "Prénom" ;
@@ -112,25 +111,25 @@ public class PV {
         return res;
     }  // un élève
     private String[] getMinGrade(){
-        return calcul(0);
+        return gradeTreatment(0);
     }   // note min
     private String[] getMaxGrade(){
-        return calcul(1);
+        return gradeTreatment(1);
     }    // note max
     private String[] getAverage(){
-        return calcul(2);
+        return gradeTreatment(2);
     }    // moyenne des notes
     private String[] getStandartDeviation(){
-        return calcul(3);
+        return gradeTreatment(3);
     }    // ecart type des notes
-
 
 
 
 
     ////////// Fonctions utilitaires de calcul
 
-    private String[] calcul(int choice){
+
+    private String[] gradeTreatment(int choice){
         String[] name = {"Note min","Note max","Moyenne","Écart-type"};
         Double[] calculYear = {Calculate.min(averageYearList),Calculate.max(averageYearList),Calculate.average(averageYearList),Calculate.standartDeviation(averageYearList)};
 
@@ -147,6 +146,7 @@ public class PV {
                 case 1: res[c+4] = String.valueOf(Calculate.max(grades));
                 case 2: res[c+4] = String.valueOf(Calculate.average(grades));
                 case 3: res[c+4] = String.valueOf(Calculate.standartDeviation(grades));
+                default: res[c+4] = "";
             }
         }
         return res;
@@ -154,20 +154,18 @@ public class PV {
 
     private double[] cleanGradeList(double[] gradeList){
         double[] newList = new double[gradeList.length];
-        int j = 0;
-        for (int i=0; i<gradeList.length;i++){
-            if (gradeList[i]== -2){ }
-            else if (gradeList[i] == -1){
-                newList[j] = 0;
-                j += 1;
-            }
-            else {
-                newList[j] = gradeList[i];
-                j += 1;
+        int indexNewList = 0;
+        for (int indexGradeList=0; indexGradeList<gradeList.length; indexGradeList++){
+            if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1)) {
+                newList[indexNewList] = gradeList[indexGradeList];
+                indexNewList += 1;
             }
         }
         return newList;
     }
+
+
+
 
     private double averageYearStudent(Student student){
         double average = 0;
@@ -193,7 +191,7 @@ public class PV {
     // Recuperer les données
     private List<Student> getStudent(Data data, Program program){
         List<Student> allStudentList = data.getStudentList();
-    List<Student> studentList = new ArrayList<Student>();
+    List<Student> studentList = new ArrayList<>();
         for (Student student: allStudentList){
             if (student.getProgramId().equals(program.getId())){
                 studentList.add(student);
@@ -202,22 +200,18 @@ public class PV {
         return studentList;
     }  // List des student de program
 
-    private List<Course> getCourseList(Data data, Program program){
-        List<Course> courseList = new ArrayList<Course>();
-        for( SimpleCourse simpleCourse : program.getSimpleCourseList()){
-            courseList.add(simpleCourse);
-        }
+    private List<Course> getCourseList( Program program){
+        List<Course> courseList = new ArrayList<>();
+
+        courseList.addAll(program.getSimpleCourseList());
+
         for (OptionCourse optionCourse : program.getOptionCourseList()){
             courseList.add(optionCourse);
-            for (SimpleCourse courseOfOption : optionCourse.getOptionList()){
-                courseList.add(courseOfOption);
-            }
+            courseList.addAll(optionCourse.getOptionList());
         }
         for (CompositeCourse compositeCourse : program.getCompositeCoursesList()){
             courseList.add(compositeCourse);
-            for (SimpleCourse courseOfComposite : compositeCourse.getCompositeList()){
-                courseList.add(courseOfComposite);
-            }
+            courseList.addAll(compositeCourse.getCompositeList());
         }
         return courseList;
     }   // Liste des cours de program
@@ -235,26 +229,38 @@ public class PV {
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse option : ((OptionCourse) course).getOptionList()){
                     if (grade.getCourse().equals(option)){
-                        return grade.getGrade();
+                        res = Math.max(res,grade.getGrade());
                     }
                 }
             }
         }
         else if (course instanceof  CompositeCourse){
             int nbCredits = 0;
+            int nbABI = 0;
+            res = 0;
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse composite : ((CompositeCourse) course).getCompositeList()){
                     if (grade.getCourse().equals(composite)){
-                        res += grade.getGrade()*composite.getCredits();
-                        nbCredits += composite.getCredits();
+                        if (grade.getGrade() == -1){
+                            nbABI +=1;
+                        }
+                        else {
+                            res += grade.getGrade()*composite.getCredits();
+                            nbCredits += composite.getCredits();
+                        }
                     }
                 }
             }
-            res = res/nbCredits;
-
+            if (nbABI == 3){
+                res = -1;
+            }
+            else {
+                res = res / nbCredits;
+            }
         }
         return Calculate.roundDouble(res,3);
     }    // Note de student à course
+
 
     private double[] getGrades(Course course){
         int courseIndex = coursesList.indexOf(course);
@@ -272,11 +278,11 @@ public class PV {
 
 
 
-    public static void main(String[] args) throws Exception {
-        Data data = new Data();
-        Program program = data.getProgramList().get(0);
-        PV pv = new PV(program,data);
-        pv.makePV();
-    }
+//    public static void main(String[] args) {
+//        Data data = new Data();
+//        Program program = data.getProgramList().get(0);
+//        PV pv = new PV(program,data);
+//        pv.makePV();
+//    }
 
 }
