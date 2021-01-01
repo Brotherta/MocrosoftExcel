@@ -9,14 +9,14 @@ import backend.program.Program;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewProgram extends JFrame {
 
-    public ViewProgram(Program program, Data data){
+
+    public ViewProgram(Program program){
         super("View Program");
 
         ///// Header Panel
@@ -81,7 +81,7 @@ public class ViewProgram extends JFrame {
 
 
         ////// ViewProgram Frame
-        setVisible(true);
+
         setSize(900,600);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -92,7 +92,8 @@ public class ViewProgram extends JFrame {
         add(infos, BorderLayout.CENTER);
 
         int ds = NumSemester(program.getOptionCourseList().get(0));
-        System.out.println(ds);
+
+        setVisible(true);
     }
 
     private JPanel printSimpleCourse(SimpleCourse course){
@@ -137,6 +138,7 @@ public class ViewProgram extends JFrame {
         allSimpleCourses.setBorder(new TitledBorder("Simple Courses"));
         semesterPanel.add(allSimpleCourses);
         semesterPanel.add(Box.createVerticalStrut(20));
+
         //// Cours Optionnels
         JPanel allOptionCourses = new JPanel();
         allOptionCourses.setLayout(new BoxLayout(allOptionCourses,BoxLayout.Y_AXIS));
@@ -146,6 +148,7 @@ public class ViewProgram extends JFrame {
         }
         semesterPanel.add(allOptionCourses);
         semesterPanel.add(Box.createVerticalStrut(20));
+
         //// Cours Composites
         JPanel allCompositeCourses = new JPanel();
         allCompositeCourses.setLayout(new BoxLayout(allCompositeCourses,BoxLayout.Y_AXIS));
@@ -178,9 +181,10 @@ public class ViewProgram extends JFrame {
 
 
 //    public static void main(String[] args) {
-//        Data data = new Data();
+//        Data data = new Data("data/data.xml");
 //        Program program = data.getProgramList().get(0);
 //        JFrame viewProgram = new ViewProgram(program);
 //    }
+
 
 }
