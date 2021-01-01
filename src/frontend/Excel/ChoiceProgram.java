@@ -156,11 +156,15 @@ public class ChoiceProgram extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        Data data = new Data();
-        Filter programFilter = new Filter();
-        frontend.Excel.ChoiceProgram choiceProgram = new frontend.Excel.ChoiceProgram(data,programFilter);
+    public Program getProgram() {
+        return program;
     }
+
+    //    public static void main(String[] args) {
+//        Data data = new Data("data/data.xml");
+//        Filter programFilter = new Filter();
+//        frontend.Excel.ChoiceProgram choiceProgram = new frontend.Excel.ChoiceProgram(data,programFilter);
+//    }
 
 
 }

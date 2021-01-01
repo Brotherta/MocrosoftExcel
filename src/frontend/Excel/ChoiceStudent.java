@@ -162,11 +162,15 @@ public class ChoiceStudent extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        Data data = new Data();
-        Filter studentFilter = new Filter();
-        ChoiceStudent choiceStudent = new ChoiceStudent(data,studentFilter);
+    public Student getStudent() {
+        return student;
     }
+
+    //    public static void main(String[] args) {
+//        Data data = new Data("data/data.xml");
+//        Filter studentFilter = new Filter();
+//        ChoiceStudent choiceStudent = new ChoiceStudent(data,studentFilter);
+//    }
 
 
 }

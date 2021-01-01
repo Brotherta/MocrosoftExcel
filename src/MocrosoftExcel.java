@@ -150,7 +150,7 @@ public class MocrosoftExcel extends JFrame {
             pv.makePV();
         });
         viewProgramButton.addActionListener(e1 -> {
-            new ViewProgram(data.getProgramList().get(0), data);
+            new ViewProgram(data.getProgramList().get(0));
         });
         newProgramButton.addActionListener(e1 -> {
             new popUpNewPrograms(data.getCourseList(), data, this, true);
