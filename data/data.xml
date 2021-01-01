@@ -271,12 +271,8 @@
         <surname>Michele</surname>
         <program>SLINF3 180</program>
         <grade>
-            <item>SLUIN501</item>
-            <value>5.1</value>
-        </grade>
-        <grade>
             <item>SLUIN502</item>
-            <value>2.6</value>
+            <value>ABI</value>
         </grade>
         <grade>
             <item>SLUIN601</item>
@@ -374,11 +370,11 @@
         </grade>
         <grade>
             <item>KLSANS5</item>
-            <value>9.557</value>
+            <value>ABI</value>
         </grade>
         <grade>
             <item>KCNUMS5</item>
-            <value>7.956</value>
+            <value>ABI</value>
         </grade>
         <grade>
             <item>KLSANS6</item>
@@ -386,7 +382,7 @@
         </grade>
         <grade>
             <item>KCINFS5</item>
-            <value>8.548</value>
+            <value>ABI</value>
         </grade>
     </student>
     <student>

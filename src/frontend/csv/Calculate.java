@@ -36,8 +36,9 @@ public class Calculate {
     public static double standartDeviation(double[] doubleList){
         double average = average(doubleList);
         double sD = 0;
+
         for (double grade : doubleList) {
-            sD += Math.pow(grade - average, 2);
+            sD += Math.pow(grade,2) - Math.pow(average, 2);
         }
         sD = Math.sqrt(sD/doubleList.length);
         return sD;

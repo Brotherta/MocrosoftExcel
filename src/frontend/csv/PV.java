@@ -17,7 +17,7 @@ import java.util.List;
 
 public class PV {
 
-
+    /// Variables
     private static final char SEPARATOR = ';';
     private final Program program;
     private final List<Course> coursesList;
@@ -46,7 +46,7 @@ public class PV {
 
 
     //////// Faire le PV
-    public void makePV() throws Exception {
+    public void makePV() {
         List<String[]> toWrite = new ArrayList<String[]>();
         toWrite.add(getHeader());
         for (Student student : studentList){
@@ -76,7 +76,7 @@ public class PV {
         } catch (IOException e){
             e.printStackTrace();
         }
-    } /// Gestion des accents à faire !!
+    }
 
 
     //////// Pour construire le csv
@@ -111,6 +111,7 @@ public class PV {
         return res;
     }  // un élève
     private String[] getMinGrade(){
+
         return gradeTreatment(0);
     }   // note min
     private String[] getMaxGrade(){
@@ -121,6 +122,7 @@ public class PV {
     }    // moyenne des notes
     private String[] getStandartDeviation(){
         return gradeTreatment(3);
+
     }    // ecart type des notes
 
 
@@ -155,6 +157,7 @@ public class PV {
     private double[] cleanGradeList(double[] gradeList){
         double[] newList = new double[gradeList.length];
         int indexNewList = 0;
+
         for (int indexGradeList=0; indexGradeList<gradeList.length; indexGradeList++){
             if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1)) {
                 newList[indexNewList] = gradeList[indexGradeList];
@@ -175,7 +178,7 @@ public class PV {
             Course course = coursesList.get(i);
             double grade = gradeList[studentList.indexOf(student)][i];
             if (grade == -1){ grade = 0;}
-            if (course instanceof SimpleCourse && grade != -2 ){
+            if (course instanceof SimpleCourse && grade != -2 && grade != -1 ){
                 average += coursesList.get(i).getCredits()* gradeList[studentList.indexOf(student)][i];
                 sumCredits += coursesList.get(i).getCredits();
             }
@@ -201,6 +204,7 @@ public class PV {
     }  // List des student de program
 
     private List<Course> getCourseList( Program program){
+
         List<Course> courseList = new ArrayList<>();
 
         courseList.addAll(program.getSimpleCourseList());
@@ -237,6 +241,7 @@ public class PV {
         else if (course instanceof  CompositeCourse){
             int nbCredits = 0;
             int nbABI = 0;
+
             res = 0;
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse composite : ((CompositeCourse) course).getCompositeList()){
@@ -278,8 +283,9 @@ public class PV {
 
 
 
-//    public static void main(String[] args) {
-//        Data data = new Data();
+
+//    public static void main(String[] args) throws Exception {
+//        Data data = new Data("data/data.xml");
 //        Program program = data.getProgramList().get(0);
 //        PV pv = new PV(program,data);
 //        pv.makePV();
