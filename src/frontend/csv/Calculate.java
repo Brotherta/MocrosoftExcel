@@ -37,7 +37,7 @@ public class Calculate {
         double average = average(doubleList);
         double sD = 0;
         for (int i=0; i<doubleList.length; i++){
-            sD += Math.pow(doubleList[i]-average,2);
+            sD += Math.pow(doubleList[i],2)-Math.pow(average,2);
         }
         sD = Math.sqrt(sD/doubleList.length);
         return sD;
