@@ -54,7 +54,7 @@ public class PanelChoixOptionsCours extends JPanel{
                 return false;
             }
         }
-        semestreOptions.setText("S "+idToSemestre);
+        semestreOptions.setText(""+idToSemestre);
         return true;
     }
     private int EctsCount(){
@@ -74,7 +74,7 @@ public class PanelChoixOptionsCours extends JPanel{
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
         }
-        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+(numberCoursOptions+1));
+        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+semestreOptions.getText()+(numberCoursOptions+1));
     }
     public OptionCourse getlistChoixCoursSimple(){
         ListeCoursSimpleFinal=new ArrayList<>();
@@ -94,7 +94,7 @@ public class PanelChoixOptionsCours extends JPanel{
             }
             ECTS.setText("" + ListeCoursSimpleFinal.get(0).getCredits());
             GenerationId();
-            return new OptionCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+            return new OptionCourse(this.identifiantOptions.getText(), "OPTION"+(numberCoursOptions+1)+" S"+semestreOptions.getText()+" "+identifiantOptions.getText(), ListeCoursSimpleFinal);
         }
         return null;
     }
@@ -107,12 +107,12 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        if(ListeCoursSimpleFinal.size()==0){ return null ;}
+        if(ListeCoursSimpleFinal.size()==0){ panelContainerCours.setBackground(Color.RED);return null ;}
         if(setSemestre()) {
             GenerationId();
             int ects = EctsCount();
             ECTS.setText("" + ects);
-            return new CompositeCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+            return new CompositeCourse(this.identifiantOptions.getText(), "Composite"+(numberCoursOptions+1)+identifiantOptions.getText(), ListeCoursSimpleFinal);
         }
         return null;
     }
@@ -143,7 +143,7 @@ public class PanelChoixOptionsCours extends JPanel{
         semestreOptions.setBorder(new TitledBorder("Semestre"));
 
         JPanel panelInfoOptions = new JPanel();
-        panelInfoOptions.setBorder(new TitledBorder("TEST"));
+       // panelInfoOptions.setBorder(new TitledBorder("TEST"));
         panelInfoOptions.setOpaque(false);
         panelInfoOptions.setLayout(new BorderLayout());
         panelInfoOptions.setPreferredSize(new Dimension(width,70));
