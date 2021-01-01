@@ -1,45 +1,70 @@
 package frontend.newPopUp;
 
-import backend.xml.XmlReader;
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.basic.BasicBorders;
-import javax.xml.bind.annotation.XmlType;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 public class PanelChoixOptionsCours extends JPanel{
+    private final String prefixeId;
     private List<Course> courseList;
     private int numberCoursOptions;
-
-    private List<PanelChoixCours> panelChoixCoursList;
     private List<Object> listChoixCoursSimple;
     private List<SimpleCourse> ListeCoursSimpleFinal;
-    private int numeroOptionsUntiedToProgram;
-    private JLabel identifiantOptions;
-    private JLabel semestreOptions;
+    private JTextField identifiantOptions;
+    private JTextField semestreOptions;
     private JButton addButtonCours;
     private JPanel panelContainerCours;
-    private JLabel ECTS;
+    private JTextField ECTS;
     private int numeroCoursIn;
-    private JFormattedTextField nameOptions;
+
+    private int width;
     public int getNumberCoursOptions() {
         return numberCoursOptions;
     }
-    private void EctsCount(){
-        int etcs=0;
+    private boolean setSemestre(){
+        String id=ListeCoursSimpleFinal.get(0).getId();
+        int j=0;
+        for ( j = 0; j < id.length(); j++) {
+            if (Character.isDigit(id.charAt(j))) {
+                break;
+            }
+        }
+        char idToSemestre=id.charAt(j);
+
+        for(int i =1;i<ListeCoursSimpleFinal.size();i++) {
+            String id2=ListeCoursSimpleFinal.get(i).getId();
+            char idToSemestre2;
+            int w = 0;
+            for (w=0; j < id.length(); w++) {
+                if (Character.isDigit(id2.charAt(w))) {
+                    break;
+                }
+            }
+            idToSemestre2=id2.charAt(w);
+            if(idToSemestre!=idToSemestre2)
+            {
+                JOptionPane.showMessageDialog(this, "Les cours d'un meme bloc doit etre au meme semestres, merci de modifier les cours");
+                return false;
+            }
+        }
+        semestreOptions.setText("S "+idToSemestre);
+        return true;
+    }
+    private int EctsCount(){
+        int ects=0;
         for(int i=0;i<ListeCoursSimpleFinal.size();i++)
         {
-            etcs+=ListeCoursSimpleFinal.get(i).getCredits();
-
+            ects+=ListeCoursSimpleFinal.get(i).getCredits();
         }
-       ECTS.setText(""+etcs);
+       //ECTS.setText(""+etcs);
+        return ects;
     }
     private void GenerationId()
     {
@@ -49,11 +74,10 @@ public class PanelChoixOptionsCours extends JPanel{
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(0);
             idGene+=ListeCoursSimpleFinal.get(i).getName().charAt(1);
         }
-        identifiantOptions.setText((nameOptions.getText()+idGene).toUpperCase());
+        identifiantOptions.setText(prefixeId+idGene.toUpperCase()+(numberCoursOptions+1));
     }
     public OptionCourse getlistChoixCoursSimple(){
         ListeCoursSimpleFinal=new ArrayList<>();
-
         for(int i=0;i<listChoixCoursSimple.size();i++)
         {
             if(listChoixCoursSimple.get(i)!="NULL")
@@ -61,12 +85,21 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        GenerationId();
-        return new OptionCourse(this.identifiantOptions.getText(),this.nameOptions.getText(),ListeCoursSimpleFinal);
+        if(ListeCoursSimpleFinal.size()==0){ panelContainerCours.setBackground(Color.RED);return null ;}
+        if(setSemestre()) {
+            int ects = EctsCount();
+            if (ects % ListeCoursSimpleFinal.get(0).getCredits() != 0) {
+                JOptionPane.showMessageDialog(this, "Toute les options doivent avoir le meme nombre d'ects.\n Merci de modifier les cours");
+                return null;
+            }
+            ECTS.setText("" + ListeCoursSimpleFinal.get(0).getCredits());
+            GenerationId();
+            return new OptionCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+        }
+        return null;
     }
     public CompositeCourse getlistChoixCoursSimpleAsComposite(){
         ListeCoursSimpleFinal=new ArrayList<>();
-
         for(int i=0;i<listChoixCoursSimple.size();i++)
         {
             if(listChoixCoursSimple.get(i)!="NULL")
@@ -74,144 +107,103 @@ public class PanelChoixOptionsCours extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        GenerationId();
-        EctsCount();
-        return new CompositeCourse(this.identifiantOptions.getText(),this.nameOptions.getText(),ListeCoursSimpleFinal);
+        if(ListeCoursSimpleFinal.size()==0){ return null ;}
+        if(setSemestre()) {
+            GenerationId();
+            int ects = EctsCount();
+            ECTS.setText("" + ects);
+            return new CompositeCourse(this.identifiantOptions.getText(), "TODO", ListeCoursSimpleFinal);
+        }
+        return null;
     }
-    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo)
+    PanelChoixOptionsCours(List<Course> courseList, int width, int numberCoursOptions,String optionsOuCompo,String prefixeId)
     {
         super();
+        setOpaque(false);
         this.numeroCoursIn=0;
+        this.courseList = courseList;
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
-        this.nameOptions= new JFormattedTextField("nom");
-        nameOptions.setBorder(BorderFactory.createLineBorder(Color.black));
-        this.ECTS=new JLabel("ECTS");
-        ECTS.setBorder(BorderFactory.createLineBorder(Color.black));
-        nameOptions.setMaximumSize(new Dimension(100,50));
-        nameOptions.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if((nameOptions.getValue().toString()=="nom")||(nameOptions.getValue().toString()=="a remplir"))
-                {
-                    nameOptions.setValue("");
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }});
+        this.width=width;
+        this.prefixeId=prefixeId;
+
         setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
-        setSize(new Dimension(width,50));
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        identifiantOptions = new JLabel("ID");
-        identifiantOptions.setBorder(BorderFactory.createLineBorder(Color.black));
-        semestreOptions = new JLabel("Semestre");
-        semestreOptions.setBorder(BorderFactory.createLineBorder(Color.black));
+        setBorder(BorderFactory.createLineBorder(Color.black));
+        setLayout(new BorderLayout());
+
+        JPanel containerInfoOptions=new JPanel();
+        containerInfoOptions.setLayout(new BoxLayout(containerInfoOptions,BoxLayout.X_AXIS));
+        this.ECTS=new JTextField("",12);
+        this.ECTS.setBorder(new TitledBorder("ECTS"));
+        identifiantOptions = new JTextField("",12);
+        identifiantOptions.setBorder(new TitledBorder("Identifiant"));
+        identifiantOptions.setSize(new Dimension(width,70));
+        semestreOptions = new JTextField("",12);
+        semestreOptions.setMaximumSize(new Dimension(width,70));
+        semestreOptions.setBorder(new TitledBorder("Semestre"));
 
         JPanel panelInfoOptions = new JPanel();
-        panelInfoOptions.setLayout(new BoxLayout(panelInfoOptions,BoxLayout.X_AXIS));
-        panelInfoOptions.setPreferredSize(new Dimension(width/3,50));
-        panelInfoOptions.add(nameOptions);
-        panelInfoOptions.add(identifiantOptions);
-        panelInfoOptions.add(semestreOptions);
-        panelInfoOptions.add(ECTS);
+        panelInfoOptions.setBorder(new TitledBorder("TEST"));
+        panelInfoOptions.setOpaque(false);
+        panelInfoOptions.setLayout(new BorderLayout());
+        panelInfoOptions.setPreferredSize(new Dimension(width,70));
 
 
-        panelContainerCours = new JPanel();
+        //containerInfoOptions.setPreferredSize(new Dimension(width,50));
+        containerInfoOptions.add(identifiantOptions);
+        containerInfoOptions.add(semestreOptions);
+        containerInfoOptions.add(ECTS);
+        panelInfoOptions.add(containerInfoOptions,BorderLayout.WEST);
+        this.panelContainerCours = new JPanel();
+        panelContainerCours.setOpaque(false);
+        panelContainerCours.setOpaque(false);
         panelContainerCours.setLayout(new BoxLayout(panelContainerCours,BoxLayout.Y_AXIS));
         ////////////// Les deux premieres options car le choix entre rien et rien c pas ouf \\\\\\\\\\
-        PanelChoixCours panelChoixCours1=new PanelChoixCours(courseList,width,numeroCoursIn);
-        numeroCoursIn++;
-        listChoixCoursSimple.add("NULL");
-        JPanel panelTmp1=new JPanel();
-        panelTmp1.setSize(new Dimension((width/4)-30,70));
-        panelTmp1.add(panelChoixCours1);
-        panelContainerCours.add(panelTmp1);
-        JPanel panelOptionsTmp1=new JPanel();
-        panelOptionsTmp1.setLayout(new BoxLayout(panelOptionsTmp1,BoxLayout.Y_AXIS));
-        JButton annuler1=new JButton("X");
-        annuler1.addActionListener(e2->{
-            listChoixCoursSimple.set(panelChoixCours1.getNumberCoursSimple(),"NULL");
-            panelContainerCours.remove(panelTmp1);
-            revalidate();
-            repaint();
-        });
-        JButton Cree1=new JButton("V");
-        Cree1.addActionListener(e3->{
-            Course leCours=panelChoixCours1.getCourse();
-            listChoixCoursSimple.set(panelChoixCours1.getNumberCoursSimple(),leCours);
-        });
-        panelOptionsTmp1.add(Cree1);
-        panelOptionsTmp1.add(annuler1);
-        panelTmp1.add(panelOptionsTmp1);
-
-        PanelChoixCours panelChoixCours2=new PanelChoixCours(courseList,width,numeroCoursIn);
-        numeroCoursIn++;
-        listChoixCoursSimple.add("NULL");
-        JPanel panelTmp2=new JPanel();
-        panelTmp2.setSize(new Dimension((width/4)-30,70));
-        panelTmp2.add(panelChoixCours2);
-        panelContainerCours.add(panelTmp2);
-        JPanel panelOptionsTmp2=new JPanel();
-        panelOptionsTmp2.setLayout(new BoxLayout(panelOptionsTmp2,BoxLayout.Y_AXIS));
-        JButton annuler2=new JButton("X");
-        annuler2.addActionListener(e2->{
-            listChoixCoursSimple.set(panelChoixCours2.getNumberCoursSimple(),"NULL");
-            panelContainerCours.remove(panelTmp2);
-            revalidate();
-            repaint();
-        });
-        JButton Cree2=new JButton("V");
-        Cree2.addActionListener(e3->{
-            Course leCours=panelChoixCours2.getCourse();
-            listChoixCoursSimple.set(panelChoixCours2.getNumberCoursSimple(),leCours);
-        });
-        panelOptionsTmp2.add(Cree2);
-        panelOptionsTmp2.add(annuler2);
-        panelTmp2.add(panelOptionsTmp2);
-        panelContainerCours.add(panelTmp1);
-        panelContainerCours.add(panelTmp2);
-        ////////////// Les deux premieres options car le choix entre rien et rien c pas ouf \\\\\\\\\
-
+        actionAjout();
+        ///////////////////////////////////
+        actionAjout();
         addButtonCours=new JButton("+");
         addButtonCours.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PanelChoixCours panelChoixCours=new PanelChoixCours(courseList,width,numeroCoursIn);
-                numeroCoursIn++;
-                listChoixCoursSimple.add("NULL");
-                JPanel panelTmp=new JPanel();
-                panelTmp.setSize(new Dimension((width/4)-30,70));
-                panelTmp.add(panelChoixCours);
-                panelContainerCours.add(panelTmp);
-                JPanel panelOptionsTmp=new JPanel();
-                panelOptionsTmp.setLayout(new BoxLayout(panelOptionsTmp,BoxLayout.Y_AXIS));
-                JButton annuler=new JButton("X");
-                annuler.addActionListener(e2->{
-                    listChoixCoursSimple.set(panelChoixCours.getNumberCoursSimple(),"NULL");
-                    panelContainerCours.remove(panelTmp);
-                    revalidate();
-                    repaint();
-
-                });
-                JButton Cree=new JButton("V");
-                Cree.addActionListener(e3->{
-                    Course leCours=panelChoixCours.getCourse();
-                    listChoixCoursSimple.set(panelChoixCours.getNumberCoursSimple(),leCours);
-                });
-                panelOptionsTmp.add(Cree);
-                panelOptionsTmp.add(annuler);
-                panelTmp.add(panelOptionsTmp);
-                revalidate();
-                repaint();
+                actionAjout();
             }
         });
-
-        add(panelInfoOptions);
-        add(panelContainerCours);
-        add(addButtonCours);
-
-
+        add(panelInfoOptions,BorderLayout.NORTH);
+        add(panelContainerCours,BorderLayout.CENTER);
+        add(addButtonCours,BorderLayout.SOUTH);
     }
+    private void actionAjout(){
+        PanelChoixCours panelChoixCours=new PanelChoixCours(this.courseList,this.width,numeroCoursIn);
+        this.numeroCoursIn++;
+        listChoixCoursSimple.add("NULL");
+        JPanel panelTmp=new JPanel();
+        panelTmp.setOpaque(false);
+        panelTmp.setSize(new Dimension((width/4)-30,70));
+        panelTmp.add(panelChoixCours);
+        this.panelContainerCours.add(panelTmp);
+        JPanel panelOptionsTmp=new JPanel();
+        panelOptionsTmp.setOpaque(false);
+        panelOptionsTmp.setLayout(new BoxLayout(panelOptionsTmp,BoxLayout.Y_AXIS));
+        JButton annuler=new JButton("X");
+        annuler.addActionListener(e2->{
+            this.listChoixCoursSimple.set(panelChoixCours.getNumberCoursSimple(),"NULL");
+            this.panelContainerCours.remove(panelTmp);
+            this.revalidate();
+            this.repaint();
+        });
+        JButton Cree=new JButton("V");
+        Cree.addActionListener(e3->{
+            Course leCours=panelChoixCours.getCourse();
+            this.listChoixCoursSimple.set(panelChoixCours.getNumberCoursSimple(),leCours);
+        });
+        panelOptionsTmp.add(Cree);
+        panelOptionsTmp.add(annuler);
+        panelTmp.add(panelOptionsTmp);
+        this.panelContainerCours.add(panelTmp);
+        revalidate();
+        repaint();
+    }
+
 
 }
