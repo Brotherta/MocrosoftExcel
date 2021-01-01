@@ -156,11 +156,15 @@ public class ChoiceCourse extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        Data data = new Data();
-        Filter courseFilter = new Filter();
-        ChoiceCourse choiceCourse = new ChoiceCourse(data,courseFilter);
+    public Course getCourse() {
+        return course;
     }
+
+    //    public static void main(String[] args) {
+//        Data data = new Data("data/data.xml");
+//        Filter courseFilter = new Filter();
+//        ChoiceCourse choiceCourse = new ChoiceCourse(data,courseFilter);
+//    }
 
 
 }

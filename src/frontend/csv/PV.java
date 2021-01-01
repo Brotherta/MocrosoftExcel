@@ -11,14 +11,13 @@ import backend.student.Student;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 
 public class PV {
 
-
+    /// Variables
     private static final char SEPARATOR = ';';
     private Program program;
     private List<Course> coursesList;
@@ -33,7 +32,7 @@ public class PV {
         List<Student> list = getStudent(data,program);
         Collections.sort(list,(a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         this.studentList = list;
-        this.coursesList = getCourseList(data, program);
+        this.coursesList = getCourseList(program);
         this.averageYearList = new double[studentList.size()];
         this.gradeList = new double[studentList.size()][coursesList.size()];
         for (int s=0; s<studentList.size(); s++){
@@ -77,14 +76,14 @@ public class PV {
         } catch (IOException e){
             e.printStackTrace();
         }
-    } /// Gestion des accents à faire !!
+    }
 
 
     //////// Pour construire le csv
 
     private String[] getHeader(){
-        int resSize = this.coursesList.size() + 4;
-        String[] res = new String[resSize] ;
+        int headerSize = this.coursesList.size() + 4;
+        String[] res = new String[headerSize] ;
         res[0] = "N° Étudiant";
         res[1] = "Nom" ;
         res[2] = "Prénom" ;
@@ -112,25 +111,24 @@ public class PV {
         return res;
     }  // un élève
     private String[] getMinGrade(){
-        return calcul(0);
+        return gradeTreatement(0);
     }   // note min
     private String[] getMaxGrade(){
-        return calcul(1);
+        return gradeTreatement(1);
     }    // note max
     private String[] getAverage(){
-        return calcul(2);
+        return gradeTreatement(2);
     }    // moyenne des notes
     private String[] getStandartDeviation(){
-        return calcul(3);
+        return gradeTreatement(3);
     }    // ecart type des notes
-
 
 
 
 
     ////////// Fonctions utilitaires de calcul
 
-    private String[] calcul(int choice){
+    private String[] gradeTreatement(int choice){
         String[] name = {"Note min","Note max","Moyenne","Écart-type"};
         Double[] calculYear = {Calculate.min(averageYearList),Calculate.max(averageYearList),Calculate.average(averageYearList),Calculate.standartDeviation(averageYearList)};
 
@@ -147,6 +145,7 @@ public class PV {
                 case 1: res[c+4] = String.valueOf(Calculate.max(grades));
                 case 2: res[c+4] = String.valueOf(Calculate.average(grades));
                 case 3: res[c+4] = String.valueOf(Calculate.standartDeviation(grades));
+                default: res[c+4] = "";
             }
         }
         return res;
@@ -154,16 +153,12 @@ public class PV {
 
     private double[] cleanGradeList(double[] gradeList){
         double[] newList = new double[gradeList.length];
-        int j = 0;
-        for (int i=0; i<gradeList.length;i++){
-            if (gradeList[i]== -2){ }
-            else if (gradeList[i] == -1){
-                newList[j] = 0;
-                j += 1;
-            }
-            else {
-                newList[j] = gradeList[i];
-                j += 1;
+        int indexNewList = 0;
+        for (int indexGradeList=0; indexGradeList<gradeList.length;indexGradeList++){
+            if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1))
+            {
+                newList[indexNewList] = gradeList[indexGradeList];
+                indexNewList += 1;
             }
         }
         return newList;
@@ -177,7 +172,7 @@ public class PV {
             Course course = coursesList.get(i);
             double grade = gradeList[studentList.indexOf(student)][i];
             if (grade == -1){ grade = 0;}
-            if (course instanceof SimpleCourse && grade != -2 ){
+            if (course instanceof SimpleCourse && grade != -2 && grade != -1 ){
                 average += coursesList.get(i).getCredits()* gradeList[studentList.indexOf(student)][i];
                 sumCredits += coursesList.get(i).getCredits();
             }
@@ -202,7 +197,7 @@ public class PV {
         return studentList;
     }  // List des student de program
 
-    private List<Course> getCourseList(Data data, Program program){
+    private List<Course> getCourseList( Program program){
         List<Course> courseList = new ArrayList<Course>();
         for( SimpleCourse simpleCourse : program.getSimpleCourseList()){
             courseList.add(simpleCourse);
@@ -235,18 +230,22 @@ public class PV {
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse option : ((OptionCourse) course).getOptionList()){
                     if (grade.getCourse().equals(option)){
-                        return grade.getGrade();
+                        res = Math.max(res,grade.getGrade());
                     }
                 }
             }
         }
         else if (course instanceof  CompositeCourse){
             int nbCredits = 0;
+            int nbABI = 0;
+            res = -1;
             for (Grade grade : student.getGradeList()){
                 for (SimpleCourse composite : ((CompositeCourse) course).getCompositeList()){
                     if (grade.getCourse().equals(composite)){
-                        res += grade.getGrade()*composite.getCredits();
-                        nbCredits += composite.getCredits();
+                        if (grade.getGrade() != -1){
+                            res += grade.getGrade()*composite.getCredits();
+                            nbCredits += composite.getCredits();
+                        }
                     }
                 }
             }
@@ -273,7 +272,7 @@ public class PV {
 
 
 //    public static void main(String[] args) throws Exception {
-//        Data data = new Data();
+//        Data data = new Data("data/data.xml");
 //        Program program = data.getProgramList().get(0);
 //        PV pv = new PV(program,data);
 //        pv.makePV();
