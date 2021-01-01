@@ -46,7 +46,23 @@ public class Student {
     public List<Grade> getGradeList() {
         return gradeList;
     }
-/*
+
+    @Override
+    public boolean equals(Object obj) {
+        Student student = (Student) obj;
+        return student.getStudentId().equals(this.getStudentId());
+    }
+
+    public Grade getGradeById(String gradeIdPlusName) {
+        for (Grade grade : getGradeList()) {
+            if (gradeIdPlusName.contains(grade.getCourse().getId())) {
+                return grade;
+            }
+        }
+        return null;
+    }
+
+    /*
     public static void main(String[] args) {
         Course course1=new SimpleCourse("AL","Automate et Langage",6);
         Course course2=new SimpleCourse("PF","Programmation Fonctionnel",6);

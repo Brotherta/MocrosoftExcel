@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class popUpNewStudent extends JDialog {
+public class PopUpNewStudent extends JDialog {
 
 private int width = 1200;
 private int height = 720;
@@ -47,7 +47,7 @@ private JPanel panelGlobale;
     private final List<Program> programList;
 
 
-public popUpNewStudent(List<Program> programList,List<Course> courseList, Data data,  JFrame main, boolean bool){
+public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data data, JFrame main, boolean bool){
     super(main,bool);
     this.programList=programList;
     this.choixOptionsCours=new ArrayList<>();
@@ -186,7 +186,7 @@ public popUpNewStudent(List<Program> programList,List<Course> courseList, Data d
     ajoutDeCours.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            PanelChoixCours panelChoixCours= new PanelChoixCours(courseList,width/4,numberCoursSimple);
+            CourseChoicePanel panelChoixCours= new CourseChoicePanel(courseList,width/4,numberCoursSimple);
             numberCoursSimple++;
             NewCourseListProgram.add("NULL");
             JButton annuler=new JButton("X");

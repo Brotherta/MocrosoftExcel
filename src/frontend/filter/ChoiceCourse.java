@@ -1,7 +1,8 @@
-package frontend.Excel;
+package frontend.filter;
 
 import backend.Data;
 import backend.course.Course;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -9,17 +10,17 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChoiceCourse extends JFrame {
+public class ChoiceCourse extends JDialog {
     List<String> infos;
     GetInfosPanel getInfosPanel;
     List<Course> resultSearchCourse;
     Course course;
     JPanel inChooseCoursePanel;
 
-    public ChoiceCourse(Data data,Filter courseFilter){
+    public ChoiceCourse(Data data, Filter courseFilter, JFrame main, boolean bool){
 
 
-        super("Chercher un cours à filtrer");
+        super(main, bool);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(500,500);
@@ -73,7 +74,7 @@ public class ChoiceCourse extends JFrame {
 
         // Fermer la fenêtre
         checkButton.addActionListener(e -> {
-            System.exit(0);
+            dispose();
         });
 
 

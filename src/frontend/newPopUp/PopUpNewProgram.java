@@ -13,7 +13,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
-public class popUpNewPrograms extends JDialog {
+public class PopUpNewProgram extends JDialog {
 
     JPanel panelGlobale; // Contient PanelInfoProgramme (North) , PanelCours(Center), PanelFin(SOUTH)
     JPanel panelInfoProgramme; // Contient FormatedTextField nom, ComboBOx semestre, Label ID
@@ -33,7 +33,7 @@ public class popUpNewPrograms extends JDialog {
     private List<OptionCourse> NewCourseOptionsListProgramFinal;
     private List<CompositeCourse> NewCourseCompositeListProgramFinal;
 
-    public popUpNewPrograms(List<Course> courseList,Data data, JFrame main, boolean bool){
+    public PopUpNewProgram(List<Course> courseList, Data data, JFrame main, boolean bool){
         super(main,bool);
         //Data data=new Data();
         this.data=data;
@@ -134,7 +134,7 @@ public class popUpNewPrograms extends JDialog {
                         JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme avant d'y ajouté des cours");
                         return;
                     }
-                    PanelChoixCours panelChoixCours= new PanelChoixCours(courseList,width/4,numberCoursSimple);
+                    CourseChoicePanel panelChoixCours= new CourseChoicePanel(courseList,width/4,numberCoursSimple);
                     numberCoursSimple++;
                     NewCourseListProgram.add("NULL");
                     JButton annuler=new JButton("X");
@@ -198,7 +198,7 @@ public class popUpNewPrograms extends JDialog {
                     JOptionPane.showMessageDialog(main, "Veuillez générez un identifiant avant d'ajouté des cours");
                     return;
                 }
-                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursOptions,"Options",identifiant.getText(),(semestre.getSelectedIndex()));
+                MultipleChoiceCoursePanel panelChoixOptionsCours= new MultipleChoiceCoursePanel(courseList,width/4,numberCoursOptions,"Options",identifiant.getText(),(semestre.getSelectedIndex()));
                 numberCoursOptions++;
                 NewCourseOptionsListProgram.add("NULL");
                 JButton annuler=new JButton("Supprimer l'options");
@@ -263,7 +263,7 @@ public class popUpNewPrograms extends JDialog {
                     JOptionPane.showMessageDialog(main, "Veuillez choisir l'année de ce programme avant d'y ajouté des cours");
                     return;
                 }
-                PanelChoixOptionsCours panelChoixOptionsCours= new PanelChoixOptionsCours(courseList,width/4,numberCoursComposite,"Composite",identifiant.getText(),(semestre.getSelectedIndex()));
+                MultipleChoiceCoursePanel panelChoixOptionsCours= new MultipleChoiceCoursePanel(courseList,width/4,numberCoursComposite,"Composite",identifiant.getText(),(semestre.getSelectedIndex()));
                 numberCoursComposite++;
                 NewCourseCompositeListProgram.add("NULL");
                 JButton annuler=new JButton("Supprimer");

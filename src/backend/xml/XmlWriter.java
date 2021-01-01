@@ -19,16 +19,16 @@ import java.util.List;
 public class XmlWriter {
     private final String path;
     private final XmlBny writer;
-
+    private Document doc;
 
     public XmlWriter(String path) {
         this.path = path;
         this.writer = new XmlBny(path, true);
+        this.doc = writer.getDoc();
     }
 
 
     public void writeInXml(List<Object> buffer)  {
-        Document doc = writer.getDoc();
         Element root = writer.getRoot();
 
         for (Object o: buffer) {
@@ -43,26 +43,25 @@ public class XmlWriter {
                 addProgramsToXml((Program) o, doc, root);
             }
         }
-        updateXml(doc);
+        updateXml();
     }
 
-    public void removeStudent(String id)  {
-        Document doc = writer.getDoc();
+    public void removeStudent(List<String> studentIdList)  {
         Element root = writer.getRoot();
 
-        List studentList = XmlBny.getChildren(root, "student");
-        for (int i = 0; i < studentList.size(); i++) {
-            Element xmlStudent = (Element) studentList.get(i);
-            if (xmlStudent.getElementsByTagName("identifier").item(0).getTextContent().equals(id)) {
-                xmlStudent.getParentNode().removeChild(xmlStudent);
-                break;
+        for (String id : studentIdList) {
+            List studentList = XmlBny.getChildren(root, "student");
+            for (int i = 0; i < studentList.size(); i++) {
+                Element xmlStudent = (Element) studentList.get(i);
+                if (xmlStudent.getElementsByTagName("identifier").item(0).getTextContent().equals(id)) {
+                    xmlStudent.getParentNode().removeChild(xmlStudent);
+                }
             }
         }
-        updateXml(doc);
+        updateXml();
     }
 
-    public void modifyGrade(String studentId, String gradeId, String grade) {
-        Document doc = writer.getDoc();
+    public void modifyGrade(String studentId, String gradeId, String gradeValue) {
         Element root = writer.getRoot();
 
         List studentList = XmlBny.getChildren(root, "student");
@@ -75,13 +74,13 @@ public class XmlWriter {
 
                     Element xmlGrade = (Element) gradeList.get(j);
                     if (xmlGrade.getElementsByTagName("item").item(0).getTextContent().equals(gradeId)) {
-                        xmlGrade.getElementsByTagName("value").item(0).setTextContent(grade);
+                        xmlGrade.getElementsByTagName("value").item(0).setTextContent(gradeValue);
                         break;
                     }
                 }
             }
         }
-        updateXml(doc);
+        updateXml();
     }
 
     public void modifyGrade(String studentId, String gradeId) {
@@ -96,7 +95,7 @@ public class XmlWriter {
         }
     }
 
-    private void updateXml(Document doc) {
+    public void updateXml() {
         try {
             Source xmlInput = new DOMSource(doc);
             StreamResult xmlOutput = new StreamResult(new File(path));

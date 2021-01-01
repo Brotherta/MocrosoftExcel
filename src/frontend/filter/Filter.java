@@ -1,4 +1,4 @@
-package frontend.Excel;
+package frontend.filter;
 
 import backend.Data;
 import backend.course.Course;

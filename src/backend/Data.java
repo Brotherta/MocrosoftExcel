@@ -2,15 +2,12 @@ package backend;
 
 import backend.course.Course;
 import backend.program.Program;
+import backend.student.Grade;
 import backend.student.Student;
 import backend.xml.XmlReader;
 import backend.xml.XmlWriter;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
+import com.sun.xml.internal.fastinfoset.util.ValueArrayResourceException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,20 +47,32 @@ public class Data {
 
     public void addStudent (Student student) {
         studentList.add(student);
-        save.addBuffer(student);
+        save.addToAddBuffer(student);
     }
 
     public void addCourse (Course course) {
         courseList.add(course);
-        save.addBuffer(course);
+        save.addToAddBuffer(course);
     }
 
     public void addProgram(Program program) {
         programList.add(program);
-        save.addBuffer(program);
+        save.addToAddBuffer(program);
     }
 
+    public void deleteStudent(Student student) {
+        studentList.remove(student);
+        save.addToDeleteBuffer(student.getStudentId());
+    }
 
+    public void modifyGrade(Student student, Grade grade) {
+        studentList.set(getIndexStudent(student), student);
+        save.addToModifyBuffer(student, grade);
+    }
+
+    private int getIndexStudent(Student student) {
+        return studentList.indexOf(student);
+    }
 
     public void doSave(String path) {
         save.doSave(path);
@@ -71,24 +80,45 @@ public class Data {
     }
 
     private static class Save {
-        protected List<Object> buffer;
+        protected List<Object> addBuffer;
+        protected List<String> deleteBuffer;
+        protected List<Object> modifyBuffer;
 
         public Save() {
-            buffer = new ArrayList<>();
+            addBuffer = new ArrayList<>();
+            deleteBuffer = new ArrayList<>();
+            modifyBuffer = new ArrayList<>();
         }
 
-        public void addBuffer(Object object) {
-            buffer.add(object);
+        public void addToAddBuffer(Object object) {
+            addBuffer.add(object);
         }
 
-        public List<Object> getBuffer(){
-            return buffer;
+        public void addToDeleteBuffer(String id) {
+            deleteBuffer.add(id);
+        }
+
+        public void addToModifyBuffer(Student student, Grade grade) {
+            modifyBuffer.add(student);
+            modifyBuffer.add(grade);
+        }
+
+        public List<Object> getAddBuffer(){
+            return addBuffer;
         }
 
         public void doSave(String path)  {
             XmlWriter writer = new XmlWriter(path);
-            writer.writeInXml(buffer);
-            buffer.clear();
+            writer.writeInXml(addBuffer);
+            addBuffer.clear();
+            writer.removeStudent(deleteBuffer);
+            deleteBuffer.clear();
+            for(int i = 0; i< modifyBuffer.size(); i+=2) {
+                Student student = (Student) modifyBuffer.get(i);
+                Grade grade = (Grade) modifyBuffer.get(i+1);
+                writer.modifyGrade(student.getStudentId(), grade.getCourse().getId(), String.valueOf(grade.getGrade()));
+            }
+            writer.updateXml();
         }
 
     }

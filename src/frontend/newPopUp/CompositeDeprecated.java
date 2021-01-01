@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
-public class PanelChoixCompositeCours extends JPanel{
+public class CompositeDeprecated extends JPanel{
     private List<Course> courseList;
 
-    PanelChoixCompositeCours(List<Course> courseList,int width,int numberCoursComposite)
+    CompositeDeprecated(List<Course> courseList, int width, int numberCoursComposite)
     {
         super();
         JLabel WIP=new JLabel("Work in Progress 2 ");
