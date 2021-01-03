@@ -78,14 +78,22 @@ public class NewCoursePanel extends JPanel{
     }
     public Object getCourse(){
         if(isStringInt(ECTS.getValue().toString())) {
-            if (!((name.getValue().equals("")) || Character.isSpaceChar(name.getValue().toString().charAt(0)))) {
-                identifiant.setText(("" + name.getValue().toString().charAt(0) + name.getValue().toString().charAt(1) + semestre.getSelectedItem().toString().charAt(9)+number).toUpperCase());
-                List<String> contenu = new ArrayList();
-                contenu.add(name.getValue().toString());
-                contenu.add(identifiant.getText());
-                contenu.add(ECTS.getValue().toString());
-                setBackground(new Color(101, 193, 96));
-                return contenu;
+            if (!((name.getText().equals("")) || Character.isSpaceChar(name.getValue().toString().charAt(0)))) {
+                if(!(Character.isDigit(name.getText().charAt(0)) ||Character.isDigit(name.getText().charAt(1)))) {
+                    identifiant.setText(("" + name.getValue().toString().charAt(0) + name.getValue().toString().charAt(1) + semestre.getSelectedItem().toString().charAt(9) + number).toUpperCase());
+                    List<String> contenu = new ArrayList();
+                    contenu.add(name.getText());
+                    name.setEditable(false);
+                    contenu.add(identifiant.getText());
+                    contenu.add(ECTS.getText());
+                    ECTS.setEditable(false);
+                    semestre.setEnabled(false);
+                    setBackground(new Color(101, 193, 96));
+                    return contenu;
+                }else {
+                    JOptionPane.showMessageDialog(this, "Les deux premiers caractères ne doivent pas etre des chiffres");
+                    return "NULL";
+                }
             } else {
                 name.setValue("Nom non remplie");
                 return "NULL";

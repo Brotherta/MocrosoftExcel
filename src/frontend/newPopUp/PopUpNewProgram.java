@@ -219,11 +219,11 @@ public class PopUpNewProgram extends JDialog {
                     if(lesCours!=null) {
                         NewCourseOptionsListProgram.set(panelChoixOptionsCours.getNumberCoursOptions(), lesCours);
                         NewCourseOptionsListProgramFinal = ValiderCours(NewCourseOptionsListProgram);
-                        panelTmp.setBackground(Color.GREEN);
+                        panelTmp.setBackground(new Color(101, 193, 96));
                     }
                     else
                     {
-                        panelTmp.setBackground(Color.RED);
+                        panelTmp.setBackground(new Color(0xD41E39));
                     }
                 });
                 JPanel tmpBouton=new JPanel();
@@ -283,7 +283,6 @@ public class PopUpNewProgram extends JDialog {
                     CompositeCourse lesCours=panelChoixOptionsCours.getlistChoixCoursSimpleAsComposite();
                     if(lesCours!=null) {
                         NewCourseCompositeListProgram.set(panelChoixOptionsCours.getNumberCoursOptions(), lesCours);
-                        panelTmp.setBackground(Color.green);
                         NewCourseCompositeListProgramFinal=ValiderCours(NewCourseCompositeListProgram);
                     }
                     else {

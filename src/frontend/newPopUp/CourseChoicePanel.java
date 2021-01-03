@@ -73,7 +73,7 @@ public class CourseChoicePanel extends JPanel {
     {
         name.removeAllItems();
         name.addItem(course.getName());
-        this.setBackground(Color.GREEN);
+        this.setBackground(new Color(101, 193, 96));
         return this.course;
     }
 

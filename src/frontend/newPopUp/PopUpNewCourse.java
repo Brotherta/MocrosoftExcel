@@ -10,6 +10,7 @@ public class PopUpNewCourse extends JDialog {
     List<Object> ContenuPanels;
     private int number=0;
     Data data;
+    private JPanel mainPanel;
     public PopUpNewCourse(Data data, JFrame main, boolean bool) {
         super(main, bool);
         this.data=data;
@@ -25,7 +26,7 @@ public class PopUpNewCourse extends JDialog {
         panelGlob.setPreferredSize(new Dimension(800,500));
 
 
-        JPanel mainPanel = new JPanel();
+        this.mainPanel = new JPanel();
         JPanel panelMenu=new JPanel();
         panelMenu.setLayout(new BorderLayout());
         panelMenu.setMaximumSize(new Dimension(800,100));
@@ -40,29 +41,7 @@ public class PopUpNewCourse extends JDialog {
 
         button.addActionListener(e1 -> {
             ////////////////////////////////////////////////////////////////////////////////////////////////
-            ContenuPanels.add("NULL");
-            JPanel paneltmp=new JPanel();
-            paneltmp.setLayout(new BoxLayout(paneltmp,BoxLayout.X_AXIS));
-            NewCoursePanel newCourse = new NewCoursePanel(number+1);
-            this.number++;
-            paneltmp.add(newCourse);
-            JButton annuler=new JButton("Annuler");
-            paneltmp.add(annuler);
-            annuler.addActionListener(e2->{
-                ContenuPanels.set(newCourse.getNumber(),"NULL");
-                mainPanel.remove(paneltmp);
-                revalidate();
-                repaint();
-            });
-            JButton Creer=new JButton("Creer");
-            paneltmp.add(Creer);
-            Creer.addActionListener(e3->{
-                ContenuPanels.set(newCourse.getNumber(),newCourse.getCourse());
-                newCourse.setBackground(Color.GREEN);
-            });
-            mainPanel.revalidate();
-            mainPanel.add(paneltmp);
-            revalidate();
+            ajoutCours();
             ////////////////////////////////////////////////////////////////////////////////////////////////
         });
         JButton validate = new JButton("Terminer");
@@ -86,6 +65,22 @@ public class PopUpNewCourse extends JDialog {
        // panelFin.setMaximumSize(new Dimension(1080,50));
         panelFin.add(validate,BorderLayout.EAST);
         ////////////////////////////////////////////////////////////////////////////////////////////////
+        ajoutCours();
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        //scrollPane.setMinimumSize(new Dimension(720,500));
+        scrollPane.setPreferredSize(new Dimension(800,500));
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        panelGlob.add(scrollPane);
+
+        panelGlob.add(panelFin,BorderLayout.SOUTH);
+       // panelGlob.add(mainPanel,BorderLayout.CENTER);
+        add(panelGlob);
+        setVisible(true);
+    }
+
+    private void ajoutCours(){
         ContenuPanels.add("NULL");
         JPanel paneltmp=new JPanel();
         paneltmp.setLayout(new BoxLayout(paneltmp,BoxLayout.X_AXIS));
@@ -104,22 +99,11 @@ public class PopUpNewCourse extends JDialog {
         paneltmp.add(Creer);
         Creer.addActionListener(e3->{
             ContenuPanels.set(newCourse.getNumber(),newCourse.getCourse());
+            //newCourse.setBackground(new Color(0xE648A546, true));
         });
         mainPanel.revalidate();
         mainPanel.add(paneltmp);
         revalidate();
-        ////////////////////////////////////////////////////////////////////////////////////////////////
-        JScrollPane scrollPane = new JScrollPane(mainPanel);
-        //scrollPane.setMinimumSize(new Dimension(720,500));
-        scrollPane.setPreferredSize(new Dimension(800,500));
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        panelGlob.add(scrollPane);
-
-        panelGlob.add(panelFin,BorderLayout.SOUTH);
-       // panelGlob.add(mainPanel,BorderLayout.CENTER);
-        add(panelGlob);
-        setVisible(true);
     }
 /*
     public static void main(String[] args) {

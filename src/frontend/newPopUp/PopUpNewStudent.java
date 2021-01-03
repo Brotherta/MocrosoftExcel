@@ -31,7 +31,7 @@ private JPanel panelGlobale;
             private List<CompositeCourse> CoursComposite;
             private JPanel semester1Panel;
             private JPanel semester2Panel;
-                private int sizeOfchoixOptionsCours;
+                private int nbrOptions;
                 private List<Course> choixOptionsCours;
             private JPanel panelCoursSupplementaire;
                 private int numberCoursSimple;
@@ -50,10 +50,12 @@ private JPanel panelGlobale;
 public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data data, JFrame main, boolean bool){
     super(main,bool);
     this.programList=programList;
-    this.choixOptionsCours=new ArrayList<>();
+    //System.out.println(programList);
+    //this.choixOptionsCours=new ArrayList<>();
     this.NewCourseListProgram=new ArrayList<>();
     this.NewCourseListProgramFinal=new ArrayList<>();
     this.data=data;
+
     setSize(new Dimension(width,height));
     panelGlobale = new JPanel();
         /////////////////// Info etudiant
@@ -82,6 +84,7 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
             containerNameProgram.setLayout(new BorderLayout());
             //containerNameProgram.setLayout(new BoxLayout(containerNameProgram,BoxLayout.X_AXIS));
             containerNameProgram.setMaximumSize(new Dimension(width/4,height/20));
+
             for(int i=0;i<programList.size();i++)
             {
                 Program current=programList.get(i);
@@ -89,8 +92,8 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
                 String idCurrent=current.getId();
                 nameProgram.addItem(nameCurrent+" "+idCurrent);
             }
+            nameProgram.setSelectedIndex(0);
             containerNameProgram.add(nameProgram,BorderLayout.WEST);
-
             panelCoursTiedToProgram = new JPanel();
             Cours = new ArrayList<>();
             CoursOptionnel = new ArrayList<>();
@@ -105,11 +108,14 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
             nameProgram.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(nameProgram.getSelectedIndex()!=-1)
+                    if(!(nameProgram.getSelectedItem().equals("Programme")))
                     {
+                       // System.out.println(nameProgram.getSelectedIndex());
                         panelCoursTiedToProgram.remove(panelCoursSimple);
                         panelCoursTiedToProgram.remove(semester1Panel);
                         panelCoursTiedToProgram.remove(semester2Panel);
+                        choixOptionsCours=new ArrayList<>();
+                        nbrOptions=0;
                         Cours=programList.get(nameProgram.getSelectedIndex()).getSimpleCourseList();
                         CoursOptionnel=programList.get(nameProgram.getSelectedIndex()).getOptionCourseList();
                         CoursComposite=programList.get(nameProgram.getSelectedIndex()).getCompositeCoursesList();
@@ -237,31 +243,39 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
         Terminer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Grade> listGrade=new ArrayList<>();
-                for(int i=0;i<Cours.size();i++)
-                {
-                    listGrade.add(new Grade(-2,Cours.get(i)));
-                }
-                for(int i=0;i<choixOptionsCours.size();i++)
-                {
-                    listGrade.add(new Grade(-2,choixOptionsCours.get(i)));
-                }
-                for(int i=0;i<CoursComposite.size();i++)
-                {
-                    List<SimpleCourse> listTmp=new ArrayList(CoursComposite.get(i).getCompositeList());
-                    for(int j=0;j<listTmp.size();j++)
-                    {
-                        listGrade.add(new Grade(-2, listTmp.get(j)));
+                if(nomStudent.getText().length()!=0 && prenomStudent.getText().length()!=0) {
+                    if (!(nameProgram.getSelectedItem().equals("Programme"))) {
+                        List<Grade> listGrade = new ArrayList<>();
+                        for (int i = 0; i < Cours.size(); i++) {
+                            listGrade.add(new Grade(-2, Cours.get(i)));
+                        }
+                        for (int i = 0; i < choixOptionsCours.size(); i++) {
+                           // System.out.println(choixOptionsCours);
+                            if (choixOptionsCours.get(i) == null) {
+                                JOptionPane.showMessageDialog(main, "Option "+i+" pas remplie");
+                                return;
+                            }
+                            listGrade.add(new Grade(-2, choixOptionsCours.get(i)));
+                        }
+                        for (int i = 0; i < CoursComposite.size(); i++) {
+                            List<SimpleCourse> listTmp = new ArrayList(CoursComposite.get(i).getCompositeList());
+                            for (int j = 0; j < listTmp.size(); j++) {
+                                listGrade.add(i, new Grade(-2, listTmp.get(j)));
+                            }
+                        }
+                        for (int i = 0; i < NewCourseListProgramFinal.size(); i++) {
+                            listGrade.add(new Grade(-2, NewCourseListProgramFinal.get(i)));
+                        }
+                        Student student = new Student(nomStudent.getText(), prenomStudent.getText(), idStudent.getText(), programList.get(nameProgram.getSelectedIndex()).getId(), listGrade);
+                       // System.out.println("Nom : " + student.getName() + "Liste :" + student.getGradeList());
+                        data.addStudent(student);
+                        dispose();
+                        return;
                     }
+                    JOptionPane.showMessageDialog(main, "Il faut choisir un programme");
+                    return;
                 }
-                for(int i=0;i<NewCourseListProgramFinal.size();i++)
-                {
-                    listGrade.add(new Grade(-2,NewCourseListProgramFinal.get(i)));
-                }
-                Student student =  new Student(nomStudent.getText(),prenomStudent.getText(), idStudent.getText(),programList.get(nameProgram.getSelectedIndex()).getId(),listGrade);
-                System.out.println("Nom : "+student.getName()+"Liste :"+student.getGradeList());
-                data.addStudent(student);
-                dispose();
+                JOptionPane.showMessageDialog(main, "Nom et prenom à remplir");
                 return;
             }
         });
@@ -279,40 +293,36 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
 
     private String generateIdStudent() {
         int Year = Calendar.getInstance().get(Calendar.YEAR);
-        return ""+Year+data.getCourseList().size();
+        return ""+Year+data.getStudentList().size();
 
     }
 
     //////////Tweak
 private JPanel printOptionCourseTweak(OptionCourse course){
-    JPanel optionCourses = printMultipleSimpleCoursesTweak(course.getOptionList());
     choixOptionsCours.add(null);
-    this.sizeOfchoixOptionsCours++;
+    JPanel optionCourses = printMultipleSimpleCoursesTweak(course.getOptionList());   // Je créé le panel qui contient les options
     optionCourses.setBorder(new TitledBorder(course.getName()+" - "+course.getId()+" - "+course.getCredits()+" ects"));
+    this.nbrOptions++;
     return optionCourses;
 }   // Panel d'une optionCourse
-    private JRadioButton printSimpleCourseTweak(Course course){
-       // JPanel simpleCourse = new JPanel();
-        int creationNumber=sizeOfchoixOptionsCours;
+
+    private JRadioButton printSimpleCourseTweak(Course course,int numeroDeCreation){
         JRadioButton simpleCourseInfo = new JRadioButton(course.getName()+" - "+course.getId()+" - "+course.getCredits()+" ects");
         simpleCourseInfo.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                choixOptionsCours.set(creationNumber,course);
-
+                choixOptionsCours.set(numeroDeCreation,course);
+               // System.out.println("Choix :"+choixOptionsCours+"\n Size :"+nbrOptions+"\n Vrai size"+choixOptionsCours.size());
             }
         });
-      //  simpleCourse.add(simpleCourseInfo);
-      //  simpleCourse.setMaximumSize(new Dimension(500,30));
-      //  simpleCourse.setLayout(new FlowLayout(FlowLayout.LEFT));
         return simpleCourseInfo;
     }
     private JPanel printMultipleSimpleCoursesTweak(List<SimpleCourse> courseList){
-        int number=0;
+
         JPanel allCoursesPanel = new JPanel();
         allCoursesPanel.setLayout(new BoxLayout(allCoursesPanel,BoxLayout.Y_AXIS));
         ButtonGroup group=new ButtonGroup();
         for (SimpleCourse course : courseList){
-            JRadioButton truc=printSimpleCourseTweak(course);
+            JRadioButton truc=printSimpleCourseTweak(course,this.nbrOptions);
             group.add(truc);
             allCoursesPanel.add(truc);
         }
@@ -386,12 +396,11 @@ private JPanel printOptionCourse(OptionCourse course){
             allCompositeCourses.add(compositePanel);
         }
         Noptional.add(allCompositeCourses);
-      //  semesterPanel.add(Box.createVerticalStrut(20));
         //// Cours Optionnels
         JPanel allOptionCourses = new JPanel();
         allOptionCourses.setLayout(new BoxLayout(allOptionCourses,BoxLayout.Y_AXIS));
         for (OptionCourse course : optionCourseList){
-            JPanel optionPanel = printOptionCourseTweak(course);
+            JPanel optionPanel = printOptionCourseTweak(course);  // Creation du panel options avec en parametre le cours optionnel // course contient une option cours
             allOptionCourses.add(optionPanel);
         }
         semesterPanel.add(new JScrollPane(Noptional));

@@ -129,7 +129,7 @@ public class MultipleChoiceCoursePanel extends JPanel{
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
         this.width=width;
-        this.prefixeId="SL";   // ToModified
+        this.prefixeId="SL";   // on commence tout les id de programme par SL.
         this.anneeProgramLie=anneeProgramLie;
         setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
         setBorder(BorderFactory.createLineBorder(Color.black));
