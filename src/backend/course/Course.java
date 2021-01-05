@@ -1,6 +1,8 @@
 package backend.course;
 
-public interface Course {
+import backend.Item;
+
+public interface Course extends Item {
 
     String getId();
     String getName();
