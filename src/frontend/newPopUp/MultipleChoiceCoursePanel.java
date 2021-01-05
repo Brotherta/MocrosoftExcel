@@ -111,12 +111,12 @@ public class MultipleChoiceCoursePanel extends JPanel{
                 ListeCoursSimpleFinal.add((SimpleCourse) listChoixCoursSimple.get(i));
             }
         }
-        if(ListeCoursSimpleFinal.size()==0){ /*panelContainerCours.setBackground(Color.RED);*/return null ;}
+        if(ListeCoursSimpleFinal.size()==0){ return null ;}
         if(setSemestre()) {
             GenerationId();
             int ects = EctsCount();
             ECTS.setText("" + ects);
-            return new CompositeCourse(this.identifiantOptions.getText(), "Composite"+(numberCoursOptions+1)+identifiantOptions.getText(), ListeCoursSimpleFinal);
+            return new CompositeCourse(this.identifiantOptions.getText(), "Composite "+(numberCoursOptions+1)+" "+identifiantOptions.getText(), ListeCoursSimpleFinal);
         }
         return null;
     }
@@ -129,12 +129,11 @@ public class MultipleChoiceCoursePanel extends JPanel{
         this.listChoixCoursSimple=new ArrayList<>();
         this.numberCoursOptions=numberCoursOptions;
         this.width=width;
-        this.prefixeId="SL";   // on commence tout les id de programme par SL.
+        this.prefixeId=prefixeId;   // on commence tout les id de programme par SL.
         this.anneeProgramLie=anneeProgramLie;
         setBorder(new TitledBorder(optionsOuCompo+(numberCoursOptions+1)));
         setBorder(BorderFactory.createLineBorder(Color.black));
         setLayout(new BorderLayout());
-
         JPanel containerInfoOptions=new JPanel();
         containerInfoOptions.setLayout(new BoxLayout(containerInfoOptions,BoxLayout.X_AXIS));
         this.ECTS=new JTextField("",12);
@@ -186,7 +185,7 @@ public class MultipleChoiceCoursePanel extends JPanel{
         listChoixCoursSimple.add("NULL");
         JPanel panelTmp=new JPanel();
         panelTmp.setOpaque(false);
-        panelTmp.setSize(new Dimension((width/4)-30,70));
+        panelTmp.setSize(new Dimension(width,70));
         panelTmp.add(panelChoixCours);
         this.panelContainerCours.add(panelTmp);
         JPanel panelOptionsTmp=new JPanel();

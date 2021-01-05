@@ -33,7 +33,7 @@ private JPanel panelGlobale;
             private JPanel semester2Panel;
                 private int nbrOptions;
                 private List<Course> choixOptionsCours;
-            private JPanel panelCoursSupplementaire;
+            private panelContainerCoursSimple panelCoursSupplementaire;
                 private int numberCoursSimple;
                 private List<Object> NewCourseListProgram;
                 private List<SimpleCourse> NewCourseListProgramFinal;
@@ -173,59 +173,10 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
                     }
             });
 
-        panelCoursSupplementaire=new JPanel();
+        panelCoursSupplementaire=new panelContainerCoursSimple(width,courseList,BoxLayout.X_AXIS);
         //////////////////////////////////////////////////////
     //////////////PanelCoursSimple////
-
-    panelCoursSimple.setSize(new Dimension(width/4,500));
-    panelCoursSimple.setLayout(new BoxLayout(panelCoursSimple,BoxLayout.X_AXIS));
-    JButton ajoutDeCours = new JButton("Ajouter un Cours");
-    JPanel menuCoursSimple=new JPanel();
-    menuCoursSimple.setLayout(new BoxLayout(menuCoursSimple,BoxLayout.X_AXIS));
-    menuCoursSimple.add(ajoutDeCours);
-    panelCoursSimple.add(menuCoursSimple);
-    JPanel panelChoixCoursContainer = new JPanel();
-    panelChoixCoursContainer.setBorder(new TitledBorder("Liste Cours"));
-    panelChoixCoursContainer.setSize(new Dimension(width/4,500));
-    panelChoixCoursContainer.setLayout(new BoxLayout(panelChoixCoursContainer,BoxLayout.X_AXIS));
-    numberCoursSimple=0;
-    ajoutDeCours.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            CourseChoicePanel panelChoixCours= new CourseChoicePanel(courseList,width/4,numberCoursSimple);
-            numberCoursSimple++;
-            NewCourseListProgram.add("NULL");
-            JButton annuler=new JButton("X");
-            JPanel panelTmp=new JPanel();
-            panelTmp.setSize(new Dimension((width/4)-30,70));
-            panelChoixCoursContainer.add(panelTmp);
-            annuler.addActionListener(e2->{
-                NewCourseListProgram.set(panelChoixCours.getNumberCoursSimple(),"NULL");
-                panelChoixCoursContainer.remove(panelTmp);
-                NewCourseListProgramFinal=ValiderCours(NewCourseListProgram);
-                revalidate();
-                repaint();
-            });
-            JButton Cree=new JButton("V");
-            Cree.addActionListener(e3->{
-                Course leCours=panelChoixCours.getCourse();
-                NewCourseListProgram.set(panelChoixCours.getNumberCoursSimple(),leCours);
-                NewCourseListProgramFinal=ValiderCours(NewCourseListProgram);
-                // System.out.println(NewCourseListProgram);
-                // System.out.println(NewCourseListProgramFinal);
-            });
-            JPanel tmpBouton=new JPanel();
-            tmpBouton.setLayout(new BoxLayout(tmpBouton,BoxLayout.Y_AXIS));
-            panelTmp.add(panelChoixCours);
-            tmpBouton.add(Cree);
-            tmpBouton.add(annuler);
-            panelTmp.add(tmpBouton);
-            revalidate();
-            // repaint();
-        }
-    });
-
-    panelCoursSimple.add(panelChoixCoursContainer);
+    panelCoursSimple.add(panelCoursSupplementaire);
     JScrollPane scrollPaneCoursSimple = new JScrollPane(panelCoursSimple);
     scrollPaneCoursSimple.setPreferredSize(new Dimension(width/3,500));
     scrollPaneCoursSimple.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -317,7 +268,6 @@ private JPanel printOptionCourseTweak(OptionCourse course){
         return simpleCourseInfo;
     }
     private JPanel printMultipleSimpleCoursesTweak(List<SimpleCourse> courseList){
-
         JPanel allCoursesPanel = new JPanel();
         allCoursesPanel.setLayout(new BoxLayout(allCoursesPanel,BoxLayout.Y_AXIS));
         ButtonGroup group=new ButtonGroup();
@@ -325,8 +275,8 @@ private JPanel printOptionCourseTweak(OptionCourse course){
             JRadioButton truc=printSimpleCourseTweak(course,this.nbrOptions);
             group.add(truc);
             allCoursesPanel.add(truc);
+            //truc.setEnabled(false);
         }
-
         return allCoursesPanel;
     }   // Panel d'une liste de simpleCourse
 
