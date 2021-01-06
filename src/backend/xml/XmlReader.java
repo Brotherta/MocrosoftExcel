@@ -8,41 +8,25 @@ import backend.program.Program;
 import backend.student.Grade;
 import backend.student.Student;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Fonction:
-readStudent(List<Course> courses)
-readCourse();
-readProgram(List<Course> courseList)
- */
 
 
 public class XmlReader {
-    private final String path;
-    private XmlBny reader;
-    private Element root;
+    private final Element root;
 
 
-    public XmlReader(String path) throws IOException, ParserConfigurationException, SAXException {
-        this.path = path;
-        this.reader = new XmlBny(path, false);
+    public XmlReader(String path) {
+        XmlBny reader = new XmlBny(path, false);
         this.root = reader.getRoot();
     }
 
     public List<Student> readStudent(List<Course> courses) {
         List<Student> students = new ArrayList<>();
 
-        List studentList = XmlBny.getChildren(root, "student");
-        for (int i = 0; i < studentList.size(); i++) {
-            Element xmlStudent = (Element) studentList.get(i);
-
+        List<Element> studentList = XmlBny.getChildren(root, "student");
+        for (Element xmlStudent : studentList) {
             String name = xmlStudent.getElementsByTagName("name").item(0).getTextContent();
             String id = xmlStudent.getElementsByTagName("identifier").item(0).getTextContent();
             String surname = xmlStudent.getElementsByTagName("surname").item(0).getTextContent();
@@ -50,13 +34,11 @@ public class XmlReader {
             List<Grade> grades = new ArrayList<>();
 
 
-            List gradeList = XmlBny.getChildren(xmlStudent, "grade");
-            for (int j = 0; j < gradeList.size(); j++) {
-                Element xmlGrade = (Element) gradeList.get(j);
-
+            List<Element> gradeList = XmlBny.getChildren(xmlStudent, "grade");
+            for (Element xmlGrade : gradeList) {
                 String gradeId = xmlGrade.getElementsByTagName("item").item(0).getTextContent();
                 String value = xmlGrade.getElementsByTagName("value").item(0).getTextContent();
-                if(value.equals("ABI")) {
+                if (value.equals("ABI")) {
                     value = "-1";
                 }
 
@@ -74,7 +56,7 @@ public class XmlReader {
     public List<Course> readCourse() {
         List<Course> courses = new ArrayList<>();
 
-        List courseList = XmlBny.getChildren(root, "course");
+        List<Element> courseList = XmlBny.getChildren(root, "course");
         for (Object o : courseList) {
             Element course = (Element) o;
 
@@ -92,7 +74,7 @@ public class XmlReader {
     public List<Program> readProgram(List<Course> courseList)  {
         List<Program> programs = new ArrayList<>();
 
-        List xmlProgramList = XmlBny.getChildren(root, "program");
+        List<Element> xmlProgramList = XmlBny.getChildren(root, "program");
         for (Object o1 : xmlProgramList) {
             List<SimpleCourse> simples = new ArrayList<>();
             List<OptionCourse> options = new ArrayList<>();
@@ -109,7 +91,7 @@ public class XmlReader {
 
             // OPTIONS COURSES
 
-            List xmlOptionList = XmlBny.getChildren(xmlProgram, "option");
+            List<Element> xmlOptionList = XmlBny.getChildren(xmlProgram, "option");
             for (Object o2 : xmlOptionList) {
                 Element xmlOption = (Element) o2;
                 List<SimpleCourse> optionItems = new ArrayList<>();
@@ -125,7 +107,7 @@ public class XmlReader {
 
             // COMPOSITES COURSES
 
-            List xmlCompositeList = XmlBny.getChildren(xmlProgram, "composite");
+            List<Element> xmlCompositeList = XmlBny.getChildren(xmlProgram, "composite");
             for (Object o3 : xmlCompositeList) {
                 Element xmlComposite = (Element) o3;
                 List<SimpleCourse> compositeItems = new ArrayList<>();
@@ -146,7 +128,7 @@ public class XmlReader {
     }
 
     private static void addCoursesToList(Element xmlElement, List<Course> courseList, List<SimpleCourse> listToAdd) {
-        List xmlCourseList = XmlBny.getChildren(xmlElement, "item");
+        List<Element> xmlCourseList = XmlBny.getChildren(xmlElement, "item");
         for (Object o : xmlCourseList) {
             Element xmlSimpleCourse = (Element) o;
             String simpleCourseId = xmlSimpleCourse.getTextContent();
@@ -164,14 +146,5 @@ public class XmlReader {
             }
         }
         return res;
-    }
-
-    public static void main(String[] args) {
-        // affiche pour le moment
-       //  List<Student> students = readStudent();
-        //String value = null;
-        //Double.parseDouble(Double.parseDouble(value));
-        // List<Course> courses = readCourse();
-        // readProgram(courses);
     }
 }

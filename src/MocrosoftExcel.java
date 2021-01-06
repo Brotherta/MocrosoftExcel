@@ -5,7 +5,7 @@ import backend.student.Student;
 import frontend.excel.*;
 import frontend.filter.*;
 import frontend.newPopUp.*;
-import frontend.utils.StartFrame;
+import frontend.utils.*;
 import frontend.csv.PV;
 import frontend.newPopUp.PopUpNewCourse;
 
@@ -26,8 +26,9 @@ public class MocrosoftExcel extends JFrame {
 
     public MocrosoftExcel() {
         super();
-        editable = false;
+        editable = false;  // Mode Lecture à l'ouverture.
 
+        // on récupère le chemin du fichier précédent s'il existe, sinon on lance la fenêtre StartFrame.
         String dataPath = getDataPath();
         File tmpFile = new File(dataPath);
         if (tmpFile.exists() && StartFrame.verifyXml(dataPath)) {
@@ -41,11 +42,13 @@ public class MocrosoftExcel extends JFrame {
             dataPath = getDataPath();
         }
 
+        // Initialisation des données à partir du fichier XML, on itinialise le tableau et les filtres.
         this.data = new Data(dataPath);
         excel = new ExcelPanel(data, editable);
-
-
         filter = new Filter();
+
+
+        //////////// Création de tous les éléments /////////////
 
         JMenu menu = new JMenu("Fichier");
         JMenuItem openMenu = new JMenuItem("Ouvrir");
@@ -61,6 +64,7 @@ public class MocrosoftExcel extends JFrame {
         JButton newProgramButton = new JButton("Nouveau Programme");
         JButton newStudentButton = new JButton("Nouveau Étudiant");
         JButton procesVerbalButton = new JButton("Procès Verbal");
+        JButton deleteStudentButton = new JButton("Supprimer Étudiant");
 
         JButton filterStudent = new JButton("Étudiant");
         JButton filterProgram = new JButton("Programme");
@@ -81,7 +85,9 @@ public class MocrosoftExcel extends JFrame {
                 rightOptionPanel.add(newCourseButton, BorderLayout.EAST);
                 rightOptionPanel.add(newProgramButton, BorderLayout.EAST);
                 rightOptionPanel.add(newStudentButton, BorderLayout.EAST);
+                rightOptionPanel.add(deleteStudentButton, BorderLayout.EAST);
                 rightOptionPanel.add(procesVerbalButton, BorderLayout.EAST);
+
 
             optionPanel.add(leftOptionPanel, BorderLayout.WEST);
             optionPanel.add(rightOptionPanel, BorderLayout.EAST);
@@ -116,45 +122,78 @@ public class MocrosoftExcel extends JFrame {
         filterBloc.setBackground(new Color(78, 147, 255));
         filterProgram.setBackground(new Color(180, 226, 138));
 
+
+        /////////////// Ajout pour chaque bouton d'un ActionListener /////////////////
+
         filterStudent.addActionListener(e1 -> {
             ChoiceStudent cs = new ChoiceStudent(data, filter, this, true);
             Student student = cs.getStudent();
-            JButton newFilter = filter.addStudentFilter(student);
-            activeFilter.add(newFilter, BorderLayout.WEST);
-            newFilter.setBackground(new Color(245, 128, 128));
+            if (student != null) {
+                JButton newFilter = filter.addStudentFilter(student);
+                activeFilter.add(newFilter, BorderLayout.WEST);
+                newFilter.setBackground(new Color(245, 128, 128));
 
-            addClose(activeFilter, filter, data, newFilter, student, null, null);
+                // Ajoute un bouton pour fermer le filtre à côté du nouveau filtre.
+                addClose(activeFilter, filter, data, newFilter, student, null, null);
+            }
         });
         filterBloc.addActionListener(e1 -> {
             ChoiceCourse cc = new ChoiceCourse(data, filter, this, true);
             Course course = cc.getCourse();
-            JButton newFilter = filter.addCourseFilter(course);
-            activeFilter.add(newFilter, BorderLayout.WEST);
-            newFilter.setBackground(new Color(78, 147, 255));
+            if (course != null) {
+                JButton newFilter = filter.addCourseFilter(course);
+                activeFilter.add(newFilter, BorderLayout.WEST);
+                newFilter.setBackground(new Color(78, 147, 255));
 
-            addClose(activeFilter, filter, data, newFilter, null, course, null);
+                addClose(activeFilter, filter, data, newFilter, null, course, null);
+            }
         });
         filterProgram.addActionListener(e1 -> {
             ChoiceProgram cp = new ChoiceProgram(data, filter, this, true);
             Program program = cp.getProgram();
-            JButton newFilter = filter.addProgramFilter(program);
-            activeFilter.add(newFilter, BorderLayout.WEST);
-            newFilter.setBackground(new Color(180, 226, 138));
+            if (program != null) {
+                JButton newFilter = filter.addProgramFilter(program);
+                activeFilter.add(newFilter, BorderLayout.WEST);
+                newFilter.setBackground(new Color(180, 226, 138));
 
-            addClose(activeFilter, filter, data, newFilter, null, null, program);
-        });
-        newCourseButton.addActionListener(e1 -> {
-            new PopUpNewCourse(data, this, true);
-            System.out.println(data.getCourseList().get(data.getCourseList().size()-1).getName());
-            updateExcel(filter, data);
+                addClose(activeFilter, filter, data, newFilter, null, null, program);
+            }
         });
         procesVerbalButton.addActionListener(e1 -> {
-            PV pv = new PV(data.getProgramList().get(0), data);
-            pv.makePV();
+            ChoiceProgram cp = new ChoiceProgram(data, filter, this, true);
+            Program program = cp.getProgram();
+            if (program != null) {
+                FileChooser fc = new FileChooser(this,
+                        true,
+                        program.getName()+".csv",
+                        "Où enregistrer "+program.getName()+".csv"+" ?");
+                String path = fc.getFilePath();
+                File selectedFile = fc.getFileToSave();
+                if (selectedFile != null  && selectedFile.exists()) {
+                    WarningFrame wf = new WarningFrame(this, true, "Un fichier existe déjà voulez-vous l'écraser ?");
+                    if (!wf.getStatus()) {
+                        dispose();
+                    }
+                }
+                if (path != null) {
+                    if (!path.endsWith(".csv")) {
+                        path += ".csv";
+                    }
+                    PV pv = new PV(program, data, path);
+                    pv.makePV();
+                }
+            }
         });
         viewProgramButton.addActionListener(e1 -> {
             ChoiceProgram cp = new ChoiceProgram(data, new Filter(), this, true);
-            new ViewProgram(cp.getProgram());
+            Program program = cp.getProgram();
+            if (program != null) {
+                new ViewProgram(program);
+            }
+        });
+        newCourseButton.addActionListener(e1 -> {
+            new PopUpNewCourse(data, this, true);
+            updateExcel(filter, data);
         });
         newProgramButton.addActionListener(e1 -> {
             new PopUpNewProgram(data.getCourseList(), data, this, true);
@@ -163,6 +202,19 @@ public class MocrosoftExcel extends JFrame {
         newStudentButton.addActionListener(e1 -> {
             new PopUpNewStudent(data.getProgramList(), data.getCourseList(), data, this, true);
             updateExcel(filter, data);
+        });
+        deleteStudentButton.addActionListener(e1 -> {
+            ChoiceStudent cs = new ChoiceStudent(data, new Filter(), this, true);
+            Student student = cs.getStudent();
+            if (student != null) {
+                data.deleteStudent(student);
+                if (filter.getStudentsFilter().contains(student)) {
+                    filter.removeStudentFilter(student);
+                    activeFilter.removeAll();
+                    activeFilter.repaint();
+                }
+                updateExcel(filter, data);
+            }
         });
         openMenu.addActionListener(e1 -> {
             new StartFrame(this, true);
@@ -204,6 +256,7 @@ public class MocrosoftExcel extends JFrame {
         setVisible(true);
     }
 
+    // permet de mettre à jour le tableau et de recalculer les données à afficher
     private void updateExcel(Filter filter, Data data) {
         remove(excel);
         excel = new ExcelPanel(data, editable);
@@ -213,6 +266,7 @@ public class MocrosoftExcel extends JFrame {
         revalidate();
     }
 
+    // Ajoute un bouton pour fermer le filtre à côté du nouveau filtre.
     private void addClose(JPanel activeFilter, Filter filter, Data data, JButton newFilter, Student student, Course course, Program program) {
         JButton close = new JButton();
         try {
@@ -241,6 +295,7 @@ public class MocrosoftExcel extends JFrame {
         });
     }
 
+    // On ouvre le fichier dataPath.txt pour récupérer le path de la dernière exécution
     private String getDataPath() {
         String dataPath = "";
         try {

@@ -103,6 +103,7 @@ public class Data {
             modifyBuffer.add(grade);
         }
 
+        // Dans l'optique d'un bouton Undo, on aurait pu récupérer le buffer.
         public List<Object> getAddBuffer(){
             return addBuffer;
         }

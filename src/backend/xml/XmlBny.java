@@ -17,6 +17,7 @@ public class XmlBny {
     private File file;
     private Element root;
 
+    // Permet d'ouvrir l'XML et de l'utiliser en lecture et en écriture.
     XmlBny(String path, boolean newFile)  {
         try {
             file = new File(path);

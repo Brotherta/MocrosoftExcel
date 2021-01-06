@@ -49,45 +49,43 @@ public class StartFrame extends JDialog {
             File selectedFile = fc.getFileToSave();
             if (selectedFile != null  && selectedFile.exists()) {
                 WarningFrame wf = new WarningFrame(main, true, "Un fichier existe déjà voulez-vous l'écraser ?");
-                if (wf.getStatus()) {
-                    if (path != null) {
-                        if (!path.endsWith(".xml")) {
-                            path += ".xml";
-                        }
-                        try {
-                            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-                            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-                            Document document = documentBuilder.newDocument();
-                            Element root = document.createElement("data");
-                            document.appendChild(root);
-
-                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                            Transformer transformer = transformerFactory.newTransformer();
-                            DOMSource domSource = new DOMSource(document);
-                            StreamResult streamResult = new StreamResult(new File(path));
-
-                            transformer.transform(domSource, streamResult);
-
-                            File file = new File("src/resources/dataPath.txt");
-                            FileWriter writer = new FileWriter(file);
-                            writer.write(path);
-                            writer.close();
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        status = true;
-                        dispose();
-
-                    } else {
-                        option.remove(erreurType);
-                        option.add(erreurDirectory);
-                        option.revalidate();
-                    }
-                } else {
+                if (!wf.getStatus()) {
                     dispose();
                 }
+            }
+            if (path != null) {
+                if (!path.endsWith(".xml")) {
+                    path += ".xml";
+                }
+                try {
+                    DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+                    Document document = documentBuilder.newDocument();
+                    Element root = document.createElement("data");
+                    document.appendChild(root);
 
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource domSource = new DOMSource(document);
+                    StreamResult streamResult = new StreamResult(new File(path));
+
+                    transformer.transform(domSource, streamResult);
+
+                    File file = new File("src/resources/dataPath.txt");
+                    FileWriter writer = new FileWriter(file);
+                    writer.write(path);
+                    writer.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                status = true;
+                dispose();
+
+            } else {
+                option.remove(erreurType);
+                option.add(erreurDirectory);
+                option.revalidate();
             }
         });
 

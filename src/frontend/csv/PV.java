@@ -11,7 +11,6 @@ import backend.student.Student;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -24,17 +23,19 @@ public class PV {
     private final List<Student> studentList;
     private final double[] averageYearList;
     private final double[][] gradeList;
+    private final String path;
 
 
     //////// Constructeur
-    public PV(Program program, Data data){
+    public PV(Program program, Data data, String path){
         this.program = program;
         List<Student> list = getStudent(data,program);
-        Collections.sort(list,(a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+        list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         this.studentList = list;
         this.coursesList = getCourseList(program);
         this.averageYearList = new double[studentList.size()];
         this.gradeList = new double[studentList.size()][coursesList.size()];
+        this.path = path;
         for (int s=0; s<studentList.size(); s++){
             for (int c=0; c<coursesList.size(); c++){
                 this.gradeList[s][c] = getGrade(studentList.get(s), coursesList.get(c));
@@ -47,7 +48,7 @@ public class PV {
 
     //////// Faire le PV
     public void makePV() {
-        List<String[]> toWrite = new ArrayList<String[]>();
+        List<String[]> toWrite = new ArrayList<>();
         toWrite.add(getHeader());
         for (Student student : studentList){
             toWrite.add(getStudentCsv(student));
@@ -57,12 +58,11 @@ public class PV {
         toWrite.add(getAverage());
         toWrite.add(getStandartDeviation());
 
-        String filename = program.getName()+".csv";
-        csvBuilder(toWrite,filename);
+        csvBuilder(toWrite);
     }
 
-    private void csvBuilder(List<String[]> toWrite, String filename) {
-        try (FileWriter writer = new FileWriter(filename)){
+    private void csvBuilder(List<String[]> toWrite) {
+        try (FileWriter writer = new FileWriter(path)){
             for (String[] strings : toWrite){
                 for ( int i =0; i < strings.length; i++){
                     writer.append(strings[i]);
@@ -158,9 +158,9 @@ public class PV {
         double[] newList = new double[gradeList.length];
         int indexNewList = 0;
 
-        for (int indexGradeList=0; indexGradeList<gradeList.length; indexGradeList++){
-            if (!(gradeList[indexGradeList]== -2 || gradeList[indexGradeList] == -1)) {
-                newList[indexNewList] = gradeList[indexGradeList];
+        for (double v : gradeList) {
+            if (!(v == -2 || v == -1)) {
+                newList[indexNewList] = v;
                 indexNewList += 1;
             }
         }
@@ -205,9 +205,7 @@ public class PV {
 
     private List<Course> getCourseList( Program program){
 
-        List<Course> courseList = new ArrayList<>();
-
-        courseList.addAll(program.getSimpleCourseList());
+        List<Course> courseList = new ArrayList<>(program.getSimpleCourseList());
 
         for (OptionCourse optionCourse : program.getOptionCourseList()){
             courseList.add(optionCourse);
