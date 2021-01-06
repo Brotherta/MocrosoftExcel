@@ -13,9 +13,9 @@ import java.util.List;
 
 public class Filter extends JPanel{
 
-    private List<Student> studentsFilter;
-    private List<Program> programsFilter;
-    private List<Course> coursesFilter;
+    private final List<Student> studentsFilter;
+    private final List<Program> programsFilter;
+    private final List<Course> coursesFilter;
 
 
     public Filter() {
