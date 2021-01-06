@@ -1,6 +1,5 @@
 package frontend.newPopUp;
 
-import backend.Data;
 import backend.course.CompositeCourse;
 import backend.course.Course;
 import backend.course.OptionCourse;
@@ -29,10 +28,10 @@ public class ViewProgram extends JFrame {
         List<SimpleCourse> simpleCourseList1 = new ArrayList<>();
         List<SimpleCourse> simpleCourseList2 = new ArrayList<>();
         for (SimpleCourse simpleCourse : program.getSimpleCourseList()){
-            if (NumSemester(simpleCourse) == 1){
+            if (numSemester(simpleCourse) == 1){
                 simpleCourseList1.add(simpleCourse);
             }
-            else if (NumSemester(simpleCourse) == 2){
+            else if (numSemester(simpleCourse) == 2){
                 simpleCourseList2.add(simpleCourse);
             }
             else {
@@ -42,10 +41,10 @@ public class ViewProgram extends JFrame {
         List<OptionCourse> optionCourseList1 = new ArrayList<OptionCourse>();
         List<OptionCourse> optionCourseList2 = new ArrayList<OptionCourse>();
         for (OptionCourse optionCourse : program.getOptionCourseList()){
-            if (NumSemester(optionCourse) == 1){
+            if (numSemester(optionCourse) == 1){
                 optionCourseList1.add(optionCourse);
             }
-            else if (NumSemester(optionCourse) == 2){
+            else if (numSemester(optionCourse) == 2){
                 optionCourseList2.add(optionCourse);
             }
             else {
@@ -55,10 +54,10 @@ public class ViewProgram extends JFrame {
         List<CompositeCourse> compositeCourseList1 = new ArrayList<CompositeCourse>();
         List<CompositeCourse> compositeCourseList2 = new ArrayList<CompositeCourse>();
         for (CompositeCourse compositeCourse : program.getCompositeCoursesList()){
-            if (NumSemester(compositeCourse) == 1){
+            if (numSemester(compositeCourse) == 1){
                 compositeCourseList1.add(compositeCourse);
             }
-            else if (NumSemester(compositeCourse) == 2){
+            else if (numSemester(compositeCourse) == 2){
                 compositeCourseList2.add(compositeCourse);
             }
             else {
@@ -92,7 +91,7 @@ public class ViewProgram extends JFrame {
         add(headerPanel, BorderLayout.NORTH);
         add(infos, BorderLayout.CENTER);
 
-        int ds = NumSemester(program.getOptionCourseList().get(0));
+        int ds = numSemester(program.getOptionCourseList().get(0));
 
         setVisible(true);
     }
@@ -164,7 +163,7 @@ public class ViewProgram extends JFrame {
     }
 
 
-    private int NumSemester (Course course){
+    private int numSemester(Course course){
         String courseId = course.getId();
         String[] courseIdList = courseId.split("");
         for (int i=0; i<courseIdList.length; i++) {

@@ -1,11 +1,10 @@
 package backend.program;
-import java.util.ArrayList;
 import java.util.List;
+
+import backend.Item;
 import backend.course.*;
 
-import javax.swing.text.html.Option;
-
-public class Program {
+public class Program implements Item {
     private final String id;
     private final String name;
     List<SimpleCourse> simpleCourseList;
@@ -27,6 +26,8 @@ public class Program {
     public String getName() {
         return name;
     }
+
+    public String getSurname() { return null;}
 
     public List<SimpleCourse> getSimpleCourseList() {
         return simpleCourseList;

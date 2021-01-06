@@ -1,7 +1,9 @@
 package backend.student;
+import backend.Item;
+
 import java.util.List;
 
-public class Student {
+public class Student implements Item {
     private final String name;
     private final String surname;
     private final String studentId;
@@ -38,6 +40,8 @@ public class Student {
     public String getStudentId() {
         return studentId;
     }
+
+    public String getId(){ return getStudentId();}
 
     public String getProgramId() {
         return programId;

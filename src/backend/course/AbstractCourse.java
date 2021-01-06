@@ -18,4 +18,6 @@ public abstract class AbstractCourse implements Course {
     @Override
     public int getCredits() { return this.credits; }
 
+    public String getSurname() { return null;}
+
 }
