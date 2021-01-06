@@ -71,10 +71,8 @@ public class PopUpNewProgram extends JDialog {
                     nomProgramme.setText("");
                 }
             }
-
             @Override
             public void focusLost(FocusEvent e) {
-
             }
         });
         this.identifiant = new JLabel();

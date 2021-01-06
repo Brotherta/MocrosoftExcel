@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewProgram extends JFrame {
-
+    viewBySemester vueSemestre;
 
     public ViewProgram(Program program){
         super("View Program");
@@ -23,7 +23,8 @@ public class ViewProgram extends JFrame {
         JPanel headerPanel = new JPanel();
         JLabel programName = new JLabel(program.getName()+" - "+program.getId());
         headerPanel.add(programName);
-
+        this.vueSemestre=new viewBySemester(program,false);
+        /*
         // Répartition des Cours
         List<SimpleCourse> simpleCourseList1 = new ArrayList<>();
         List<SimpleCourse> simpleCourseList2 = new ArrayList<>();
@@ -64,13 +65,13 @@ public class ViewProgram extends JFrame {
                 System.out.println("Problem");
             }
         }
-
+    */
 
         //// Semester 1 Panel
-        JPanel semester1Panel = printSemester("Semestre 1",simpleCourseList1,optionCourseList1,compositeCourseList1);
+        JPanel semester1Panel = vueSemestre.getPanelSemester1();//printSemester("Semestre 1",simpleCourseList1,optionCourseList1,compositeCourseList1);
 
         ////// Semestre 2 Panel
-        JPanel semester2Panel = printSemester("Semestre 2",simpleCourseList2,optionCourseList2,compositeCourseList2);
+        JPanel semester2Panel = vueSemestre.getPanelSemester2();//printSemester("Semestre 2",simpleCourseList2,optionCourseList2,compositeCourseList2);
 
 
         ///// Info Panel
