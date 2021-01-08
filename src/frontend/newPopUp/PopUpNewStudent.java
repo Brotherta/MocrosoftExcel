@@ -73,14 +73,16 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
             nameProgram=new JComboBox();
             containerNameProgram.setLayout(new BorderLayout());
             containerNameProgram.setMaximumSize(new Dimension(width/4,height/20));
-            for(int i=0;i<programList.size();i++)
+            int i;
+            for( i=0;i<programList.size();i++)
             {
                 Program current=programList.get(i);
                 String nameCurrent= current.getName();
                 String idCurrent=current.getId();
                 nameProgram.addItem(nameCurrent+" "+idCurrent);
             }
-            nameProgram.setSelectedIndex(0);
+            nameProgram.addItem("Pas de programme selectionné");
+            nameProgram.setSelectedIndex(i);
             containerNameProgram.add(nameProgram,BorderLayout.WEST);
             panelCoursTiedToProgram = new JPanel();
             Cours = new ArrayList<>();
@@ -99,7 +101,7 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
             nameProgram.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if(!(nameProgram.getSelectedItem().equals("Programme")))
+                    if(!(nameProgram.getSelectedItem().equals("Pas de programme selectionné")))
                     {
                         panelCoursTiedToProgram.remove(semester1Panel);
                         panelCoursTiedToProgram.remove(semester2Panel);
@@ -112,6 +114,13 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
                         semester2Panel= ViewSemester.getPanelSemester2();
                         panelCoursTiedToProgram.add(semester1Panel);
                         panelCoursTiedToProgram.add(semester2Panel);
+                        revalidate();
+                        repaint();
+                    }
+                    else
+                    {
+                        panelCoursTiedToProgram.remove(semester1Panel);
+                        panelCoursTiedToProgram.remove(semester2Panel);
                         revalidate();
                         repaint();
                     }
@@ -129,8 +138,9 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
         Terminer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(nomStudent.getText().length()!=0 && prenomStudent.getText().length()!=0) {
-                    if (!(nameProgram.getSelectedItem().equals("Programme"))) {
+                if(nomStudent.getText().length()!=0 && prenomStudent.getText().length()!=0)
+                {
+                    if (!(nameProgram.getSelectedItem().equals("Pas de programme selectionné"))) {
                         List<Grade> listGrade = new ArrayList<>();
                         for (int i = 0; i < Cours.size(); i++) {
                             listGrade.add(new Grade(-2, Cours.get(i)));
@@ -138,7 +148,7 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
                         choixOptionsCours=ViewSemester.getChoixOptionsCours();
                         for (int i = 0; i < choixOptionsCours.size(); i++) {
                             if (choixOptionsCours.get(i) == null) {
-                                JOptionPane.showMessageDialog(main, "Option "+i+1+" pas remplie");
+                                JOptionPane.showMessageDialog(main, "Option "+(i+1)+" pas remplie");
                                 return;
                             }
                             listGrade.add(new Grade(-2, choixOptionsCours.get(i)));
@@ -158,8 +168,21 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
                         dispose();
                         return;
                     }
-                    JOptionPane.showMessageDialog(main, "Il faut choisir un programme");
-                    return;
+                    else if(panelCoursSupplementaire.getNewCourseListProgramFinal().size()!=0){
+                        List<Grade> listGrade = new ArrayList<>();
+                        NewCourseListProgramFinal=panelCoursSupplementaire.getNewCourseListProgramFinal();
+                        for (int i = 0; i < NewCourseListProgramFinal.size(); i++) {
+                            listGrade.add(new Grade(-2, NewCourseListProgramFinal.get(i)));
+                        }
+                        Student student = new Student(nomStudent.getText(), prenomStudent.getText(), idStudent.getText(), "Aucun", listGrade);
+                        data.addStudent(student);
+                        dispose();
+                        return;
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(main, "Il faut choisir un programme et/ou ajouter des cours");
+                        return;
+                    }
                 }
                 JOptionPane.showMessageDialog(main, "Nom et prenom à remplir");
                 return;
