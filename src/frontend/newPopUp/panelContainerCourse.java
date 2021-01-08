@@ -1,10 +1,5 @@
 package frontend.newPopUp;
-
-import backend.course.CompositeCourse;
 import backend.course.Course;
-import backend.course.OptionCourse;
-import backend.course.SimpleCourse;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -13,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class panelContainerCoursSimple extends JPanel {
+public class panelContainerCourse extends JPanel {
 
     private List<Course> NewCourseListProgram;
     private List<Course> NewCourseListProgramFinal;
@@ -27,7 +22,7 @@ public class panelContainerCoursSimple extends JPanel {
 
     private JPanel panelChoixCoursContainer;
 
-    panelContainerCoursSimple(int width, List<Course> courseList, int axis) {
+    panelContainerCourse(int width, List<Course> courseList, int axis) {
         super();
         this.NewCourseListProgram=new ArrayList<>();
         this.NewCourseListProgramFinal=new ArrayList<>();
@@ -53,13 +48,13 @@ public class panelContainerCoursSimple extends JPanel {
             }});
         add(panelChoixCoursContainer);
     }
-    panelContainerCoursSimple(int width,List<Course> courseList,int axis,int semestre,String id) //Pour options
+    panelContainerCourse(int width, List<Course> courseList, int axis, int semestre, String id) //Pour options
     {
         super();
         this.NewCourseListProgram=new ArrayList<>();
         this.NewCourseListProgramFinal=new ArrayList<>();
         this.id =id;
-        System.out.println(id);
+     //  System.out.println(id);
         this.semestre=semestre;
         this.courseList=courseList;
         this.width=width;
@@ -135,7 +130,7 @@ public class panelContainerCoursSimple extends JPanel {
             JOptionPane.showMessageDialog(getParent(), "Veuillez choisir l'année et générez un identifiant");
             return;  // l'année est envoyé quand on génére l'identifiant, de toute façon on a besoin des deux.
         }
-        MultipleChoiceCoursePanel panelChoixOptionsCours= new MultipleChoiceCoursePanel(courseList,width/4,numberCours,"Options",id,semestre);
+        MultipleChoiceCoursePanel panelChoixOptionsCours= new MultipleChoiceCoursePanel(courseList,width/3,numberCours,"Options",id,semestre);
         numberCours++;
         NewCourseListProgram.add(null);
         JButton annuler=new JButton("Supprimer");
@@ -154,7 +149,7 @@ public class panelContainerCoursSimple extends JPanel {
         Cree.addActionListener(e3->{
             Course lesCours;
             if(id.equals("SLO")) {
-                System.out.println("As options");
+               // System.out.println("As options");
                  lesCours = panelChoixOptionsCours.getlistChoixCoursSimple();
             }else{
                  lesCours=panelChoixOptionsCours.getlistChoixCoursSimpleAsComposite();

@@ -9,7 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-
 public class viewBySemester {
 
     private JPanel panelSemester1;
@@ -94,7 +93,7 @@ public class viewBySemester {
 
     private JPanel printCompositeCourse(CompositeCourse course){
         JPanel compositeCourses = printMultipleSimpleCourses(course.getCompositeList());
-        compositeCourses.setBorder(new TitledBorder(course.getName()+" - "+course.getId()+" - "+course.getCredits()));
+        compositeCourses.setBorder(new TitledBorder(course.getName()+" - "+course.getId()+" - "+course.getCredits()+" ects"));
         return compositeCourses;
     }  // Panel d'une compositeCourse
     private JPanel printSemester(String semesterName,List<SimpleCourse> simpleCourseList, List<OptionCourse> optionCourseList, List<CompositeCourse> compositeCourseList){
@@ -135,7 +134,7 @@ public class viewBySemester {
             Noptional.add(allCompositeCourses);
         }
         else{
-            semesterPanel.add(allSimpleCourses);
+            semesterPanel.add(allCompositeCourses);
         }
         //// Cours Optionnels
         JPanel allOptionCourses = new JPanel();
@@ -205,7 +204,7 @@ public class viewBySemester {
             JRadioButton truc=printSimpleCourse(course,this.nbrOptions);
             group.add(truc);
             allCoursesPanel.add(truc);
-            truc.setEnabled(presentOrNo);
+            truc.setEnabled(true);//truc.setEnabled(presentOrNo);  // car sinon c grisé tout moche
         }
         return allCoursesPanel;
     }   // Panel d'une liste de simpleCourse

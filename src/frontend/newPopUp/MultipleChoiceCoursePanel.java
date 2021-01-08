@@ -1,9 +1,7 @@
 package frontend.newPopUp;
-
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +31,7 @@ public class MultipleChoiceCoursePanel extends JPanel{
         for ( j = 0; j < id.length(); j++) {
             if (Character.isDigit(id.charAt(j))) {
                 numeroSemestrePremierCours=Character.getNumericValue(id.charAt(j));
-                System.out.println("Numero du premier cours"+numeroSemestrePremierCours);
+             //   System.out.println("Numero du premier cours"+numeroSemestrePremierCours);
                 if(numeroSemestrePremierCours % 2 == 0){numeroSemestrePremierCours = 2;}
                 else {numeroSemestrePremierCours = numeroSemestrePremierCours%2;}
                 break;
@@ -46,7 +44,7 @@ public class MultipleChoiceCoursePanel extends JPanel{
             for (w=0; j < id.length(); w++) {
                 if (Character.isDigit(id2.charAt(w))) {
                     numeroSemestreAutreCours = Character.getNumericValue(id2.charAt(w));
-                    System.out.println("Numero du Second cours"+numeroSemestreAutreCours);
+                  //  System.out.println("Numero du Second cours"+numeroSemestreAutreCours);
                     if(numeroSemestreAutreCours % 2 == 0){numeroSemestreAutreCours = 2;}
                     else {numeroSemestreAutreCours = numeroSemestreAutreCours%2;}
                     if(numeroSemestrePremierCours!=numeroSemestreAutreCours) {

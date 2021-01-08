@@ -7,7 +7,6 @@ import backend.student.Student;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -33,7 +32,7 @@ private JPanel panelGlobale;
             private JPanel semester1Panel;
             private JPanel semester2Panel;
                 private List<Course> choixOptionsCours;
-        private panelContainerCoursSimple panelCoursSupplementaire;
+        private panelContainerCourse panelCoursSupplementaire;
                 private List<Object> NewCourseListProgram;
                 private List<Course> NewCourseListProgramFinal;
     private JPanel panelFin;
@@ -93,7 +92,7 @@ public PopUpNewStudent(List<Program> programList, List<Course> courseList, Data 
             panelCoursTiedToProgram.setLayout(new BoxLayout(panelCoursTiedToProgram,BoxLayout.Y_AXIS));
             panelCoursTiedToProgram.add(semester1Panel);
             panelCoursTiedToProgram.add(semester2Panel);
-    panelCoursSupplementaire=new panelContainerCoursSimple(width,courseList,BoxLayout.X_AXIS);
+    panelCoursSupplementaire=new panelContainerCourse(width,courseList,BoxLayout.X_AXIS);
     JScrollPane scrollPaneCoursSupplementaire = new JScrollPane(panelCoursSupplementaire);
     scrollPaneCoursSupplementaire.setPreferredSize(new Dimension(width/3,100));
     scrollPaneCoursSupplementaire.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

@@ -1,17 +1,7 @@
 package frontend.newPopUp;
-
-import backend.course.CompositeCourse;
-import backend.course.Course;
-import backend.course.OptionCourse;
-import backend.course.SimpleCourse;
 import backend.program.Program;
-
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ViewProgram extends JFrame {
     viewBySemester vueSemestre;
 
@@ -91,11 +81,11 @@ public class ViewProgram extends JFrame {
         add(headerPanel, BorderLayout.NORTH);
         add(infos, BorderLayout.CENTER);
 
-        int ds = numSemester(program.getOptionCourseList().get(0));
+
 
         setVisible(true);
     }
-
+/*
     private JPanel printSimpleCourse(SimpleCourse course){
         JPanel simpleCourse = new JPanel();
         JLabel simpleCourseInfo = new JLabel("∘ "+course.getName()+" - "+course.getId()+" - "+course.getCredits()+" ects");
@@ -180,6 +170,8 @@ public class ViewProgram extends JFrame {
 
 
 
+
+ */
 //    public static void main(String[] args) {
 //        Data data = new Data("data/data.xml");
 //        Program program = data.getProgramList().get(0);

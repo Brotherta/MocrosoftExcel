@@ -1,13 +1,10 @@
 package frontend.newPopUp;
-import backend.xml.XmlReader;
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.xml.bind.annotation.XmlType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 public class CourseChoicePanel extends JPanel {

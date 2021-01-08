@@ -26,7 +26,6 @@ public class Filter extends JPanel{
         coursesFilter = new ArrayList<>();
 
     }
-
     public JButton addStudentFilter(Student student) {
         JButton newFilter = new JButton(student.getName()+" "+student.getStudentId());
         studentsFilter.add(student);

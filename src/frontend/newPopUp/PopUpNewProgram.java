@@ -2,13 +2,9 @@ package frontend.newPopUp;
 import backend.program.Program;
 import backend.Data;
 import backend.course.*;
-
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
@@ -19,37 +15,36 @@ public class PopUpNewProgram extends JDialog {
     JPanel panelInfoProgramme; // Contient FormatedTextField nom, ComboBOx semestre, Label ID
     JPanel panelCours; // contient PanelCoursSimple , PanelCoursOptions, PanelCours Composite, X_AXIS
     private int width=1200;
-    private int numberCoursSimple;
-    private int numberCoursOptions;
-    private int numberCoursComposite;
+
     private JLabel identifiant;
     private List<Course> courseList;
     private Data data;
+     /* private int numberCoursSimple;
+    private int numberCoursOptions;
+    private int numberCoursComposite;
     private List<Object> NewCourseListProgram;
-    private List<Object> NewCourseOptionsListProgram;
-    private List<Object> NewCourseCompositeListProgram;
-
+    private List<Object> NewCourseOptionsListProgram;           // Rendu inutile par la création de classes séparé pour les panel de choix de cours
+    private List<Object> NewCourseCompositeListProgram;         // A garder en trace
     private List<SimpleCourse> NewCourseListProgramFinal;
     private List<OptionCourse> NewCourseOptionsListProgramFinal;
-    private List<CompositeCourse> NewCourseCompositeListProgramFinal;
+    private List<CompositeCourse> NewCourseCompositeListProgramFinal;*/
 
-    private panelContainerCoursSimple panelCoursSimple;
-    private panelContainerCoursSimple panelCoursOptions;
-    private panelContainerCoursSimple panelCoursComposite;
+    private panelContainerCourse panelCoursSimple;
+    private panelContainerCourse panelCoursOptions;
+    private panelContainerCourse panelCoursComposite;
     public PopUpNewProgram(List<Course> courseList, Data data, JFrame main, boolean bool){
         super(main,bool);
-        //Data data=new Data();
         this.data=data;
         this.courseList=courseList;
-        this.NewCourseListProgram=new ArrayList<>();
+      /*  this.NewCourseListProgram=new ArrayList<>();
         this.NewCourseOptionsListProgram=new ArrayList<>();
         this.NewCourseCompositeListProgram=new ArrayList<>();
-        this.NewCourseListProgramFinal=new ArrayList<>();
+        this.NewCourseListProgramFinal=new ArrayList<>();               // Rendu inutile par la création de classes séparé pour les panel de choix de cours
         this.NewCourseOptionsListProgramFinal=new ArrayList<>();
         this.NewCourseCompositeListProgramFinal=new ArrayList<>();
-       // this.NewCourseListProgramFinal=new ArrayList<>();           //Reinitialiser a chaque
-       // this.NewCourseOptionsListProgramFinal=new ArrayList<>();    //revalidation de cours
-       // this.NewCourseCompositeListProgramFinal=new ArrayList<>();  //pour évité un stack de faux
+        this.NewCourseListProgramFinal=new ArrayList<>();
+        this.NewCourseOptionsListProgramFinal=new ArrayList<>();
+        this.NewCourseCompositeListProgramFinal=new ArrayList<>();  */
         //courseList= data.getCourseList();
         ////
         setMinimumSize(new Dimension(width,720));
@@ -119,26 +114,25 @@ public class PopUpNewProgram extends JDialog {
         panelCours.setLayout(new BoxLayout(panelCours,BoxLayout.X_AXIS));
 
             //////////////PanelCoursSimple////
-            this.panelCoursSimple=new panelContainerCoursSimple(width,courseList,BoxLayout.Y_AXIS);
+            this.panelCoursSimple=new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS);
             JScrollPane scrollPaneCoursSimple = new JScrollPane(panelCoursSimple);
-            scrollPaneCoursSimple.setPreferredSize(new Dimension(width/3,500));
+            scrollPaneCoursSimple.setSize(new Dimension(width/3,500));
             scrollPaneCoursSimple.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPaneCoursSimple.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             //////////PanelCoursSimple
 
             //////////////PanelCoursOptions////
-
-        this.panelCoursOptions = new panelContainerCoursSimple(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLO");
+        this.panelCoursOptions = new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLO");
         JScrollPane scrollPanelCoursOptions = new JScrollPane(panelCoursOptions);
-        scrollPanelCoursOptions.setPreferredSize(new Dimension(width/3,500));
+        scrollPanelCoursOptions.setSize(new Dimension(width/3,500));
         scrollPanelCoursOptions.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPanelCoursOptions.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             //////////PanelCoursOptions
 
             //////////////PanelCoursComposite////
-        this.panelCoursComposite = new panelContainerCoursSimple(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLC");
+        this.panelCoursComposite = new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLC");
         JScrollPane scrollPanelCoursComposite = new JScrollPane(panelCoursComposite);
-        scrollPanelCoursOptions.setPreferredSize(new Dimension(width/3,500));
+        scrollPanelCoursOptions.setSize(new Dimension(width/3,500));
         scrollPanelCoursOptions.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPanelCoursOptions.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             //////////PanelCoursComposite
