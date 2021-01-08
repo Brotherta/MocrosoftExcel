@@ -78,7 +78,7 @@ public class NewCoursePanel extends JPanel{
     }
     public Object getCourse(){
         if(isStringInt(ECTS.getValue().toString())) {
-            if (!((name.getText().equals("")) || Character.isSpaceChar(name.getValue().toString().charAt(0)))) {
+            if (name.getText().length() > 2) {
                 if(!(Character.isDigit(name.getText().charAt(0)) ||Character.isDigit(name.getText().charAt(1)))) {
                     identifiant.setText(("" + name.getValue().toString().charAt(0) + name.getValue().toString().charAt(1) + semestre.getSelectedItem().toString().charAt(9) + number).toUpperCase());
                     List<String> contenu = new ArrayList();
