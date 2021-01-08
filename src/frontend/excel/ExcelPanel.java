@@ -133,8 +133,8 @@ public class ExcelPanel extends JPanel {
         }
 
         public void updateData(List<Student> students, List<Course> courses, List<Program> programs, Data data) {
-            setStudentFilterList(students);
             setProgramFilterList(programs, data);
+            setStudentFilterList(students);
             setCourseFilterList(courses);
 
             removeDuplicatesCourses();
@@ -154,15 +154,17 @@ public class ExcelPanel extends JPanel {
                 for (CompositeCourse composite : program.getCompositeCoursesList()) {
                     this.courseFilterList.addAll(composite.getCompositeList());
                 }
-                List<Student> studentList = Utils.getStudentListByProgramId(data, program);
-                for (Student student : studentList) {
-                    if (!studentFilterList.contains(student)){
-                        studentFilterList.add(student);
+                if (studentFilterList.isEmpty()) { // On affiche tous les étudiants du programme
+                    List<Student> studentList = Utils.getStudentListByProgramId(data, program);
+                    for (Student student : studentList) {
+                        if (!studentFilterList.contains(student)){
+                            studentFilterList.add(student);
+                        }
                     }
+                } else { // sinon que les étuduiants dans les filtres
+                    studentFilterList.clear();
                 }
             }
-
-
         }
 
         private void setCourseFilterList(List<Course> courses) {
