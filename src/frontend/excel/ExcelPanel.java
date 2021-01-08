@@ -9,6 +9,7 @@ import backend.student.Grade;
 import backend.student.Student;
 import frontend.utils.ColorCellRenderer;
 import frontend.utils.Couple;
+import frontend.utils.Utils;
 
 import javax.swing.*;
 import javax.swing.event.TableModelListener;
@@ -133,7 +134,7 @@ public class ExcelPanel extends JPanel {
 
         public void updateData(List<Student> students, List<Course> courses, List<Program> programs, Data data) {
             setStudentFilterList(students);
-            setProgramFilterList(programs);
+            setProgramFilterList(programs, data);
             setCourseFilterList(courses);
 
             removeDuplicatesCourses();
@@ -144,7 +145,7 @@ public class ExcelPanel extends JPanel {
             studentFilterList = students;
         }
 
-        private void setProgramFilterList(List<Program> programs) {
+        private void setProgramFilterList(List<Program> programs, Data data) {
             for (Program program : programs) {
                 this.courseFilterList.addAll(program.getSimpleCourseList());
                 for (OptionCourse option : program.getOptionCourseList()) {
@@ -153,7 +154,15 @@ public class ExcelPanel extends JPanel {
                 for (CompositeCourse composite : program.getCompositeCoursesList()) {
                     this.courseFilterList.addAll(composite.getCompositeList());
                 }
+                List<Student> studentList = Utils.getStudentListByProgramId(data, program);
+                for (Student student : studentList) {
+                    if (!studentFilterList.contains(student)){
+                        studentFilterList.add(student);
+                    }
+                }
             }
+
+
         }
 
         private void setCourseFilterList(List<Course> courses) {
@@ -172,8 +181,7 @@ public class ExcelPanel extends JPanel {
     }
 
 
-
-
+    // Classe qui construit le tableau avec les données.
     private static class TablePanel extends JTable implements TableModelListener {
         private final String[] headers;
         private final JTable table;
@@ -191,7 +199,6 @@ public class ExcelPanel extends JPanel {
 
             getTableHeader().setReorderingAllowed(false);
             getTableHeader().setFont(new Font("Arial", Font.BOLD, 15));
-            setRowSelectionAllowed(true);
             setFont(new Font("Arial", Font.PLAIN, 15));
             setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             autoResizeColumn();
@@ -199,16 +206,16 @@ public class ExcelPanel extends JPanel {
             setDefaultRenderer(Object.class, new ColorCellRenderer());
 
 
+            // Permet de gérer les modifications des cellules, notament vérifier
             getModel().addTableModelListener(e -> {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
                 TableModel model = (TableModel) e.getSource();
                 String columnName = model.getColumnName(column);
 
-
                 Object studentId = model.getValueAt(row, 2);
                 Object cellData = model.getValueAt(row, column);
-                Student student = getStudentById((String) studentId);
+                Student student = Utils.getStudentById(data, (String) studentId);
                 assert student != null;
                 Grade grade = student.getGradeById(columnName);
 
@@ -260,16 +267,6 @@ public class ExcelPanel extends JPanel {
                     return false;
                 }
             }
-        }
-
-        private Student getStudentById(String studentId) {
-            List<Student> students = data.getStudentList();
-            for (Student student : students) {
-                if (student.getStudentId().equals(studentId)) {
-                    return student;
-                }
-            }
-            return null;
         }
 
         @Override

@@ -7,6 +7,7 @@ import backend.course.SimpleCourse;
 import backend.program.Program;
 import backend.student.Grade;
 import backend.student.Student;
+import frontend.utils.Utils;
 import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class XmlReader {
                     value = "-1";
                 }
 
-                Course course = getCourseById(gradeId, courses);
+                Course course = Utils.getCourseById(gradeId, courses);
                 Grade grade = new Grade(Double.parseDouble(value), course);
                 grades.add(grade);
             }
@@ -133,18 +134,8 @@ public class XmlReader {
             Element xmlSimpleCourse = (Element) o;
             String simpleCourseId = xmlSimpleCourse.getTextContent();
 
-            SimpleCourse simpleCourse = (SimpleCourse) getCourseById(simpleCourseId, courseList);
+            SimpleCourse simpleCourse = (SimpleCourse) Utils.getCourseById(simpleCourseId, courseList);
             listToAdd.add(simpleCourse);
         }
-    }
-
-    private static Course getCourseById(String id, List<Course> courseList) {
-        Course res = null;
-        for (Course course : courseList) {
-            if (course.getId().equals(id)) {
-                res = course;
-            }
-        }
-        return res;
     }
 }

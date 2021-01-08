@@ -115,6 +115,7 @@ public class PopUpNewProgram extends JDialog {
 
             //////////////PanelCoursSimple////
             this.panelCoursSimple=new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS);
+            panelCoursSimple.setBorder(new TitledBorder("Cours Simple"));
             JScrollPane scrollPaneCoursSimple = new JScrollPane(panelCoursSimple);
             scrollPaneCoursSimple.setSize(new Dimension(width/3,500));
             scrollPaneCoursSimple.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -123,6 +124,7 @@ public class PopUpNewProgram extends JDialog {
 
             //////////////PanelCoursOptions////
         this.panelCoursOptions = new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLO");
+        panelCoursOptions.setBorder(new TitledBorder("Cours Option"));
         JScrollPane scrollPanelCoursOptions = new JScrollPane(panelCoursOptions);
         scrollPanelCoursOptions.setSize(new Dimension(width/3,500));
         scrollPanelCoursOptions.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -131,6 +133,7 @@ public class PopUpNewProgram extends JDialog {
 
             //////////////PanelCoursComposite////
         this.panelCoursComposite = new panelContainerCourse(this.width,courseList,BoxLayout.Y_AXIS,semestre.getSelectedIndex(),"SLC");
+        panelCoursComposite.setBorder(new TitledBorder("Cours Composite"));
         JScrollPane scrollPanelCoursComposite = new JScrollPane(panelCoursComposite);
         scrollPanelCoursOptions.setSize(new Dimension(width/3,500));
         scrollPanelCoursOptions.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

@@ -25,7 +25,7 @@ public class StartFrame extends JDialog {
 
         JPanel option = new JPanel();
         option.setLayout(new FlowLayout());
-        JLabel title = new JLabel("Bienvenue dans le meilleur programe (c'est faux)");
+        JLabel title = new JLabel("Bienvenue dans le meilleur programme de gestion d'étudiants");
 
         JButton newFile = new JButton("Nouveau fichier");
         JButton importFile = new JButton("Importer un fichier");

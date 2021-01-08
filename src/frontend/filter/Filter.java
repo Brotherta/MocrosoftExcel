@@ -1,13 +1,10 @@
 package frontend.filter;
 
-import backend.Data;
 import backend.course.Course;
 import backend.program.Program;
 import backend.student.Student;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

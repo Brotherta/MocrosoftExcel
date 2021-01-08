@@ -8,6 +8,9 @@ import backend.course.SimpleCourse;
 import backend.program.Program;
 import backend.student.Grade;
 import backend.student.Student;
+import frontend.utils.Calculate;
+import frontend.utils.Utils;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ public class PV {
     //////// Constructeur
     public PV(Program program, Data data, String path){
         this.program = program;
-        List<Student> list = getStudent(data,program);
+        List<Student> list = Utils.getStudentListByProgramId(data,program);
         list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         this.studentList = list;
         this.coursesList = getCourseList(program);
@@ -186,22 +189,6 @@ public class PV {
         return Calculate.roundDouble(average/sumCredits,3);
     }   // Moyen d'un étudiant
 
-
-
-
-
-
-    // Recuperer les données
-    private List<Student> getStudent(Data data, Program program){
-        List<Student> allStudentList = data.getStudentList();
-    List<Student> studentList = new ArrayList<>();
-        for (Student student: allStudentList){
-            if (student.getProgramId().equals(program.getId())){
-                studentList.add(student);
-            }
-        }
-        return studentList;
-    }  // List des student de program
 
     private List<Course> getCourseList( Program program){
 

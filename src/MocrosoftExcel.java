@@ -8,15 +8,15 @@ import frontend.newPopUp.*;
 import frontend.utils.*;
 import frontend.csv.PV;
 import frontend.newPopUp.PopUpNewCourse;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Objects;
-import java.util.Scanner;
+
 
 public class MocrosoftExcel extends JFrame {
     ExcelPanel excel;
@@ -29,7 +29,7 @@ public class MocrosoftExcel extends JFrame {
         editable = false;  // Mode Lecture à l'ouverture.
 
         // on récupère le chemin du fichier précédent s'il existe, sinon on lance la fenêtre StartFrame.
-        String dataPath = getDataPath();
+        String dataPath = Utils.getDataPath();
         File tmpFile = new File(dataPath);
         if (tmpFile.exists() && StartFrame.verifyXml(dataPath)) {
             this.data = new Data(dataPath);
@@ -39,7 +39,7 @@ public class MocrosoftExcel extends JFrame {
             if (! sf.getStatus()) {
                 System.exit(1);
             }
-            dataPath = getDataPath();
+            dataPath = Utils.getDataPath();
         }
 
         // Initialisation des données à partir du fichier XML, on itinialise le tableau et les filtres.
@@ -218,14 +218,14 @@ public class MocrosoftExcel extends JFrame {
         });
         openMenu.addActionListener(e1 -> {
             new StartFrame(this, true);
-            String path = getDataPath();
+            String path = Utils.getDataPath();
             this.data = new Data(path);
             filter = new Filter();
             setTitle("Mocrosoft Excel Étudiant - "+ path);
             updateExcel(filter, data);
         });
         saveMenu.addActionListener(e1 -> {
-            String path = getDataPath();
+            String path = Utils.getDataPath();
             data.doSave(path);
         });
         writeButton.addActionListener(e1 -> {
@@ -290,27 +290,16 @@ public class MocrosoftExcel extends JFrame {
             }
             else if (course != null) {
                 filter.removeCourseFilter(course);
-            } else filter.removeProgramFilter(program);
+            } else  {
+                filter.removeProgramFilter(program);
+                List<Student> studentList = Utils.getStudentListByProgramId(data, program);
+                for (Student s : studentList) {
+                    filter.removeStudentFilter(s);
+                }
+
+            }
             updateExcel(filter, data);
         });
-    }
-
-    // On ouvre le fichier dataPath.txt pour récupérer le path de la dernière exécution
-    private String getDataPath() {
-        String dataPath = "";
-        try {
-            File pathFile = new File("src/resources/dataPath.txt");
-            Scanner scanner = new Scanner(pathFile);
-            while(scanner.hasNextLine()) {
-                dataPath = scanner.nextLine();
-            }
-            scanner.close();
-            System.out.println("path: " + pathFile);
-        } catch (FileNotFoundException e) {
-            System.out.println("fichier introuvable");
-            e.printStackTrace();
-        }
-        return dataPath;
     }
 
 
