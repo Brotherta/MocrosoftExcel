@@ -1,4 +1,5 @@
 package frontend.newPopUp;
+
 import backend.course.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 public class CourseChoicePanel extends JPanel {
     public JLabel ECTS;
     public JComboBox name;
